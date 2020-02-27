@@ -1,5 +1,5 @@
 <template>
-  <div>foo</div>
+  <div @click="$router.push('/bar')">foo</div>
 </template>
 
 <script>
