@@ -7,8 +7,16 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-//Font Awesome
-@import "~font-awesome/scss/font-awesome";
+// Font Awesome
+@import '~font-awesome/scss/font-awesome';
+
+// Components
+@import 'components/buttons';
+@import 'components/list-groups';
+
+// Partials
+@import 'partials/global';
+@import 'partials/sticky-footer';
 
 #Ordering {
     .total {
