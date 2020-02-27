@@ -1,11 +1,12 @@
 <template>
   <div class="container">
+    <span class="float-right" @click="$router.push('/registration')">Register</span>
     <h3 class="text-center mb-4">Lunch Box</h3>
 
-    <form  @submit="checkForm">
+    <form @submit="checkForm">
         <div class="form-group">
-          <label for="exampleInputEmail1">Email address</label>
-          <input type="text" class="form-control" :class="{ 'is-invalid' : errors.emptyEmail || errors.invalidEmail }" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" v-model="email">
+          <label for="inputEmail">Email address</label>
+          <input type="text" class="form-control" :class="{ 'is-invalid' : errors.emptyEmail || errors.invalidEmail }" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter your email" v-model="email">
           <div class="invalid-feedback" v-if="errors.emptyEmail">
             Enter your email address.
           </div>
@@ -14,10 +15,13 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="exampleInputPassword1">Password</label>
-          <input type="password" class="form-control" :class="{ 'is-invalid' : errors.password }" id="exampleInputPassword1" placeholder="Password" v-model="password">
-          <div class="invalid-feedback">
+          <label for="inputPassword">Password</label>
+          <input type="password" class="form-control" :class="{ 'is-invalid' : errors.password || errors.shortPassword }" id="inputPassword" placeholder="Password" v-model="password">
+          <div class="invalid-feedback" v-if="errors.password">
             Enter your password.
+          </div>
+          <div class="invalid-feedback" v-if="errors.shortPassword">
+            Password must be more than 6 characters.
           </div>
         </div>
         <div class="form-check">
@@ -53,6 +57,8 @@
 
         if (!this.password) {
           this.errors.password = true;
+        } else if (this.password.length < 6) {
+          this.errors.shortPassword = true;
         }
 
         if (!Object.entries(this.errors).length) {
