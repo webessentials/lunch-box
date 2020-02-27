@@ -8,7 +8,7 @@ class CreateFoodScheduleDetailTable extends Migration
 {
     public function up()
     {
-        Schema::create('food_schedule_detail', function (Blueprint $table) {
+        Schema::create('food_schedule_details', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('food_schedule_id');
             $table->integer('food_id');
@@ -18,6 +18,6 @@ class CreateFoodScheduleDetailTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('food_schedule_detail');
+        Schema::dropIfExists('food_schedule_details');
     }
 }
