@@ -19,4 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::apiResource('foods', 'API\FoodController');
 Route::apiResource('schedules', 'API\FoodScheduleController');
-
+Route::apiResource('users', 'API\UserController');

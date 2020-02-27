@@ -10,14 +10,22 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+
+    /**
+     * @var array
+     */
+    public static $rules = [
+        'name' => 'required|max:255',
+        'email' => 'required|unique:users,email',
+        'password' => 'required|min:6|confirmed',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    protected $fillable = ['name', 'email', 'password', 'picture', 'phone_number', 'role', 'api_token'];
 
     /**
      * The attributes that should be hidden for arrays.
