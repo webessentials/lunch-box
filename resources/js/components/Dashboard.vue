@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div class="container mt-5">
+    <div class="status-bar align-items-center">
+      <h4 class="ml-4 mb-0">Dashboard</h4>
+      <button class="btn btn-primary ml-auto">Logout</button>
+    </div>
+    <div class="container mt-4">
       <div class="d-flex justify-content-center">
         <button class="btn btn-light btn-circle">
           15
@@ -30,7 +34,7 @@
       </ul>
     </div>
     <div class="sticky-footer">
-      <button class="btn btn-primary btn-block">Prepare menu</button>
+      <button class="btn btn-primary btn-block" @click="$router.push('/foodlist')">Prepare menu</button>
     </div>
   </div>
 </template>

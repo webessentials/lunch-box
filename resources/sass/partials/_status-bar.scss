@@ -1,0 +1,9 @@
+.status-bar {
+  background-color: $blue-darker;
+  display: flex;
+  height: 50px;
+  padding: 15px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
