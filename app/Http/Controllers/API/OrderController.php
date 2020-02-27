@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Food;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\FoodResource;
+use App\Order;
 use Illuminate\Http\Request;
 
-class FoodController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,7 @@ class FoodController extends Controller
      */
     public function index()
     {
-        return FoodResource::collection(Food::all());
+        //
     }
 
     /**
@@ -27,18 +26,16 @@ class FoodController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $this->validate($request, Food::$rules);
-        return Food::create($data);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Food  $food
+     * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function show(Food $food)
+    public function show(Order $order)
     {
         //
     }
@@ -47,25 +44,22 @@ class FoodController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Food  $food
+     * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Food $food)
+    public function update(Request $request, Order $order)
     {
-       $this->validate($request, Food::$rules);
-       $data = $request->all();
-       return Food::where('id',$food->id)->update($data);
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Food  $food
+     * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Food $food)
+    public function destroy(Order $order)
     {
-        $food->delete();
-        return response('', 204);
+        //
     }
 }
