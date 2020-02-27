@@ -10,10 +10,10 @@ class CreateOrderTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->boolean('paid'); /*by cash or e-cash*/
-            $table->string('note');
             $table->integer('user_id');
             $table->float('amount');
+            $table->string('note')->nullable();
+            $table->boolean('paid')->default(false)->nullable(); /*by cash or e-cash*/
             $table->timestamps();
         });
     }
