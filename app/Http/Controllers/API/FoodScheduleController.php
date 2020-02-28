@@ -33,11 +33,10 @@ class FoodScheduleController extends Controller
         $request->validate(FoodSchedule::$rules);
         $foodSchedule = null;
 
-        $data['user_id'] = 1; //:TODO refactor when auth is implemented.
-        $data['date'] = $request->date;
-
         $foodSchedule = FoodSchedule::whereDate('date',$request->date)->first();
         if ($foodSchedule == null) {
+            $data['user_id'] = 1; //:TODO refactor when auth is implemented.
+            $data['date'] = $request->date;
             $foodSchedule = FoodSchedule::create($data);
         }
 
