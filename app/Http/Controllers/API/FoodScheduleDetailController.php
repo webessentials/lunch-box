@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\FoodSchedule;
 use App\FoodScheduleDetail;
 use App\Http\Resources\FoodScheduleDetailResource;
 use App\Http\Controllers\Controller;
@@ -75,8 +76,11 @@ class FoodScheduleDetailController extends Controller
      */
     public function destroy(FoodScheduleDetail $foodScheduleDetail)
     {
-        //$foodScheduleDetail->delete();
-        dd($foodScheduleDetail);
+        $foodScheduleDetail->delete();
+        $schedule_detail = FoodScheduleDetail::where('food_schedule_id',$foodScheduleDetail->food_schedule_id)->first();
+        if($schedule_detail==null){
+            FoodSchedule::where('id',$foodScheduleDetail->food_schedule_id)->delete();
+        }
         return response($foodScheduleDetail, 204);
     }
 }
