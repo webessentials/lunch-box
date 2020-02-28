@@ -20,8 +20,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
     data() {
       return {
@@ -43,7 +41,16 @@
 
       },
       addToMenu(id) {
-        console.log('Add to menu: ' + id);
+        let date = new Date()
+        let currentDate = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+        axios.post('api/schedules', {
+          date: currentDate,
+          food_id: id
+        }).then(response => {
+          if (response.status === 201) {
+            console.log('OK');
+          }
+        })
       }
     }
   }

@@ -57,10 +57,12 @@ class OrderController extends Controller
         if($detail == null) {
             $orderDetail['quantity'] = $request->quantity;
             $orderDetail['pack_quantity'] = $request->pack_quantity;
+            $orderDetail['unit_price'] = $request->unit_price;
             OrderDetail::create($orderDetail);
         }else {
             $orderDetail['quantity'] = $request->quantity;
             $orderDetail['pack_quantity'] = $request->pack_quantity;
+            $orderDetail['unit_price'] = $request->unit_price;
             OrderDetail::where(['id' => $detail->id])->update($orderDetail);
         }
         return $order;

@@ -46,8 +46,16 @@
 
       }
     },
+    mounted() {
+      this.fetchOrders()
+    },
     methods: {
-
+      fetchOrders() {
+        axios.get('api/orders')
+        .then(response => {
+          console.log(response)
+        })
+      }
     }
   }
 </script>

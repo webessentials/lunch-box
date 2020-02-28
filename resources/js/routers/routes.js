@@ -16,7 +16,7 @@ let routes = [
   { path: '/registration', component: Registeration }
 ]
 
-if (window.user_token) {
+if (window.localStorage.getItem('user_token')) {
   routes = [
     { path: '/', redirect: '/login' },
     { path: '/foo', component: Foo },
