@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use App\FoodSchedule;
 use App\FoodScheduleDetail;
+use App\Http\Resources\FoodScheduleDetailResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -15,7 +17,7 @@ class FoodScheduleDetailController extends Controller
      */
     public function index()
     {
-        //
+        return FoodScheduleDetailResource::collection(FoodScheduleDetail::all());
     }
 
     /**
@@ -26,7 +28,21 @@ class FoodScheduleDetailController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate(FoodScheduleDetail::$rules);
+        $scheduleDetail = null;
+
+        $data['food_schedule_id'] = $request->food_schedule_id; //:TODO refactor when auth is implemented.
+        $data['food_id'] = $request->food_id;
+
+        $scheduleDetail = FoodScheduleDetail::where('food_id', $data['food_id'])
+                                            ->where('food_schedule_id', $data['food_schedule_id'])
+                                            ->first();
+
+        if($scheduleDetail == null){
+            $scheduleDetail = FoodScheduleDetail::create($data);
+        }
+
+        return $scheduleDetail;
     }
 
     /**
@@ -60,6 +76,11 @@ class FoodScheduleDetailController extends Controller
      */
     public function destroy(FoodScheduleDetail $foodScheduleDetail)
     {
-        //
+        $foodScheduleDetail->delete();
+        $schedule_detail = FoodScheduleDetail::where('food_schedule_id',$foodScheduleDetail->food_schedule_id)->first();
+        if($schedule_detail==null){
+            FoodSchedule::where('id',$foodScheduleDetail->food_schedule_id)->delete();
+        }
+        return response($foodScheduleDetail, 204);
     }
 }

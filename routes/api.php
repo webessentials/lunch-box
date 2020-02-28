@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 Route::apiResource('foods', 'API\FoodController');
 Route::apiResource('schedules', 'API\FoodScheduleController');
+Route::apiResource('schedule-details','API\FoodScheduleDetailController');
 Route::apiResource('orders', 'API\OrderController');
 
 Route::apiResource('users', 'API\UserController');
