@@ -51,6 +51,9 @@
             Password no matched.
           </div>
         </div>
+        <div class="alert alert-danger" role="alert" v-if="responseError">
+          {{ responseError }}
+        </div>
       </div>
       <div class="sticky-footer">
         <button type="submit" class="btn btn-primary btn-block mt-4">Register</button>
@@ -68,7 +71,8 @@
         phoneNumber: '',
         email: '',
         password: '',
-        confirmedPassword: ''
+        confirmedPassword: '',
+        responseError: ''
       }
     },
     methods: {
@@ -112,7 +116,22 @@
         return re.test(email);
       },
       register() {
-        this.$router.push('/bar');
+        this.responseErrors = ''
+        axios.post('api/register', {
+          name: this.name,
+          email: this.email,
+          'phone_number': this.phoneNumber,
+          password: this.password,
+          'password_confirmation': this.confirmedPassword
+        })
+        .then(response => {
+          if (response.status === 201) {
+            this.$router.push('/home')
+          }
+        }).catch(error => {
+          console.log('Error')
+          this.responseError = 'Error while trying to create.'
+        })
       }
     }
   }
