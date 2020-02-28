@@ -42,10 +42,13 @@ class OrderDetailController extends Controller
             $orderDetail['food_id'] = $request->food_id;
             $orderDetail['quantity'] = $request->quantity;
             $orderDetail['pack_quantity'] = $request->pack_quantity;
+            $orderDetail['unit_price'] = $request->unit_price;
             $orderDetail = OrderDetail::create($orderDetail);
         }else {
             if (OrderDetail::where(['id' => $orderDetail->id])
-                    ->update(['quantity' => $request->quantity, 'pack_quantity' =>  $request->pack_quantity]) > 0) {
+                    ->update(['quantity' => $request->quantity,
+                        'pack_quantity' =>  $request->pack_quantity,
+                        'unit_price' => $request->unit_price]) > 0) {
                 $orderDetail = OrderDetail::where('id', $orderDetail->id)->first();
             }
         }

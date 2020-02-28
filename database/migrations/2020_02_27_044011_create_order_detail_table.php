@@ -13,6 +13,7 @@ class CreateOrderDetailTable extends Migration
             $table->integer('order_id');
             $table->integer('food_id');
             $table->integer('quantity');
+            $table->integer('unit_price');
             $table->integer('pack_quantity'); /*show the order quantity to eat outside company*/
             $table->timestamps();
         });

@@ -23,10 +23,12 @@ class OrderDetail extends Model
         'food_id' => 'required|integer',
         'quantity' => 'required|integer',
         'pack_quantity' => 'required|integer',
+        'unit_price' => 'required'
     ];
 
     public static $update_rules = [
         'quantity' => 'required|integer',
         'pack_quantity' => 'required|integer',
+        'unit_price' => 'required'
     ];
 }
