@@ -72,6 +72,8 @@ class OrderController extends Controller
         $data['amount'] = $request->amount;
         $data['note'] = $request->note;
         if ($order == null) {
+            //TODO: store payment
+            unset($data['payment_type']);
             $order = Order::create($data);
         }else {
             if(Order::where('id', $order->id)->update($data) > 0){
@@ -79,6 +81,7 @@ class OrderController extends Controller
             }
         }
 
+        $orderDetail = [];
         $orderDetail['order_id']  = $order->id;
         $orderDetail['food_id'] = $request->food_id;
         $detail = OrderDetail::where($orderDetail)->first();
