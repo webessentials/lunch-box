@@ -19,6 +19,8 @@
 </template>
 
 <script>
+    import axios from 'axios';
+
     export default {
         data() {
             return {
@@ -30,11 +32,22 @@
         methods: {
             getFile: function (event) {
                 this.file = event.target.files[0];
-                console.log(this.file);
             },
             onAddFood: function () {
-                console.log(this.name + this.price);
-                console.log(this.file);
+                let formData = new FormData();
+                formData.append('name', this.name);
+                formData.append('price', this.price);
+                formData.append('picture', this.file);
+                axios({
+                    url: 'api/foods',
+                    method: 'post',
+                    data: formData,
+                    headers: {
+                        'content-type':'multipart/form-data'
+                    }
+                }).then(res => {
+                    console.log(res);
+                }).catch(err => console.log(err));
             }
         }
     }
