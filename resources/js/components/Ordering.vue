@@ -20,7 +20,7 @@
             <div class="form-group">
                 <label for="qty">Payment method</label>
                 <div class="input-group">
-                    <select class="form-control">
+                    <select class="form-control" v-model="payment">
                       <option value="1">Cash</option>
                       <option value="2">Transfer (ABA)</option>
                     </select>
@@ -46,7 +46,8 @@
                 food: {},
                 qty: 1,
                 note: 'abc',
-                pack_quantity: 0
+                pack_quantity: 0,
+                payment: 0
             }
         },
         computed: {
@@ -58,7 +59,9 @@
             onConfirm: function() {
                 axios.post('api/orders', {
                     amount: this.total,
+                    unit_price: this.food.price,
                     note: this.note,
+                    payment_type: this.payment,
                     food_id: this.food.id,
                     pack_quantity: this.pack_quantity,
                     quantity: this.qty
