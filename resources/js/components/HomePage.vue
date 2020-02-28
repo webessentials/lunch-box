@@ -7,10 +7,10 @@
       </div>
       <div class="container mt-4">
           <div class="d-block" v-if="!foods.length">
-              <div class="alert alert-warning">
+              <div class="alert alert-warning text-center">
                   <h3>Sorry there's no food yet</h3>
               </div>
-              <img src="../../../public/image/sad.jpg" class="img-fluid">
+              <img src="/image/sad.jpg" class="img-fluid">
           </div>
           <div v-else class="card mb-3 p-3" v-for="food in foods">
               <div class="row">
