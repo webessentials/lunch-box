@@ -6,10 +6,10 @@
         <button class="btn btn-primary ml-auto" @click="$router.push('/login')" v-else>Logout</button>
       </div>
       <div class="container mt-4">
-          <div class="card mb-3 p-3" v-for="food in foods">
+          <div class="card mb-3 p-3" v-for="food in foods" v-if="foods.length">
               <div class="row">
                   <div class="col-md-4">
-                      <img class="img-fluid" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg/1200px-Good_Food_Display_-_NCI_Visuals_Online.jpg" alt="Img">
+                      <img class="img-fluid" :src="food.picture" alt="Img">
                   </div>
                   <div class="col-md-4">
                       <div class="card-body pt-md-0">
@@ -17,7 +17,7 @@
                       </div>
                   </div>
                   <div class="col-md-4">
-                      <button class="btn btn-primary btn-block" @click="onOrder" v-if="checkToken()">Order</button>
+                      <button class="btn btn-primary btn-block" @click="$router.push('/ordering/'+food.id)" v-if="checkToken()">Order</button>
                   </div>
               </div>
           </div>
@@ -29,23 +29,27 @@
     export default {
         data() {
             return {
-                foods: [{
-                    name: 'A',
-                    price: 2
-                },
-                {
-                    name: 'B',
-                    price: 3.5
-                }]
+                foods: []
             }
         },
         methods: {
-            onOrder: function () {
-                alert('Order form pop up');
-            },
             checkToken() {
               return !!window.localStorage.getItem('user_token');
+            },
+            fetchFoods() {
+                axios.get('api/foods')
+                .then(res => {
+                    this.foods = res.data.data;
+                })
+                .catch(err => console.log(err));
+            },
+            getOrderList() {
+
             }
+        },
+        created() {
+            this.fetchFoods();
+            this.getOrderList();
         }
     }
 </script>
