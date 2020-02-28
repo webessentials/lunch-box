@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -22,13 +24,39 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * login api
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function login(){
+        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+            $user = Auth::user();
+            $user['token'] =  $user->createToken(env('APP_NAME'))->accessToken;
+            return response()->json($user);
+        } else {
+            return response()->json(['error'=>'Unauthorised'], 401);
+        }
+    }
+
+    /**
+     * Register api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request) {
+        $validator = Validator::make($request->all(), User::$rules);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+        $data = $request->all();
+        if (!isset($data['role'])) {
+            $data['role'] = 'user';
+        }
+        $data['password'] = Hash::make($data['password']);
+        $data['api_token'] = Str::random(60);
+        $user = User::create($data);
+        $user['token'] =  $user->createToken(env('APP_NAME'))->accessToken;
+        return response()->json($user, 201);
     }
 
     /**
@@ -63,15 +91,16 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * details api
      *
-     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function details()
     {
-        //
+        $user = Auth::user();
+        return response()->json($user);
     }
+
 
     /**
      * Update the specified resource in storage.
