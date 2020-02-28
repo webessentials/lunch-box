@@ -10,12 +10,12 @@
                   <div class="col-md-4">
                       <img class="img-fluid" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg/1200px-Good_Food_Display_-_NCI_Visuals_Online.jpg" alt="Img">
                   </div>
-                  <div class="col-md-6">
-                      <div class="card-body">
+                  <div class="col-md-4">
+                      <div class="card-body pt-md-0">
                           <h5>{{food.name}} (<b class="text-danger"> ${{food.price}} </b>)</h5>
                       </div>
                   </div>
-                  <div class="col-md-2 align-items-center">
+                  <div class="col-md-4">
                       <button class="btn btn-primary btn-block" @click="onOrder">Order</button>
                   </div>
               </div>
@@ -32,12 +32,10 @@
         data() {
             return {
                 foods: [{
-                    userName: 'User1',
                     name: 'A',
                     price: 2
                 },
                 {
-                    userName: 'User2',
                     name: 'B',
                     price: 3.5
                 }]
