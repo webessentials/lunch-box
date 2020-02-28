@@ -17,6 +17,8 @@ Route::apiResource('foods', 'API\FoodController');
 Route::apiResource('schedules', 'API\FoodScheduleController');
 Route::apiResource('orders', 'API\OrderController');
 
+Route::apiResource('users', 'API\UserController');
+Route::apiResource('order-details', 'API\OrderDetailController');
 Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
 Route::group(['middleware' => 'auth:api'], function() {
