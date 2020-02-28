@@ -8,7 +8,12 @@
 
     <form @submit="checkForm">
       <div class="container mt-4">
-        <h3 class="text-center mb-4">Lunch Box</h3>
+          <div class="d-inline-flex w-100 mb-4 justify-content-center">
+              <div class="logo">
+                  <img src="/images/logo.png" alt="logo" class="img-fluid">
+              </div>
+              <h3 class="text-center mt-3">Lunch Box</h3>
+          </div>
           <div class="form-group">
             <label for="inputEmail">Email address</label>
             <input type="text" class="form-control" :class="{ 'is-invalid' : errors.emptyEmail || errors.invalidEmail }" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter your email" v-model="email">
@@ -98,3 +103,10 @@
     }
   }
 </script>
+
+<style>
+    .logo {
+        width: 60px;
+        height: 60px;
+    }
+</style>
