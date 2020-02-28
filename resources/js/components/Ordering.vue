@@ -57,7 +57,7 @@
         },
         methods: {
             onConfirm: function() {
-                axios.post('api/orders', {
+                axios.post('/api/orders', {
                     amount: this.total,
                     unit_price: this.food.price,
                     note: this.note,
@@ -67,13 +67,13 @@
                     quantity: this.qty
                 }).then(res => {
                     console.log(res);
-                    if(res === 201) {
+                    if(res.status === 201) {
                         this.$router.push('/home');
                     }
                 }).catch(err => console.log(err));
             },
             fetchOrder: function () {
-                axios.get(`api/foods/${this.$route.params.id}`)
+                axios.get(`/api/foods/${this.$route.params.id}`)
                 .then(res => {
                     this.food = res.data;
                 })

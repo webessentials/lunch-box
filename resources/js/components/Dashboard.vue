@@ -51,7 +51,7 @@
     },
     methods: {
       fetchOrders() {
-        axios.get('api/orders')
+        axios.get('/api/orders')
         .then(response => {
           console.log(response)
         })
