@@ -8,6 +8,8 @@ use App\Order;
 use App\OrderDetail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
@@ -29,17 +31,16 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(Order::$rules);
+        $validator = Validator::make($request->all(), Order::$rules);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
 
-        $order = null;
-
-        $userId = 1; //:TODO refactor when auth is implemented.
-
-        $order = Order::where('user_id', $userId)
+        $order = Order::where('user_id', Auth::id())
             ->whereDate('created_at', Carbon::now()->format('y-m-d'))
             ->first();
 
-        $data['user_id'] = $userId;
+        $data['user_id'] = Auth::id();
         $data['amount'] = $request->amount;
         if ($order == null) {
             $order = Order::create($data);

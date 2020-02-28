@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderDetailResource;
 use App\OrderDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class OrderDetailController extends Controller
 {
@@ -28,7 +29,10 @@ class OrderDetailController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(OrderDetail::$rules);
+        $validator = Validator::make($request->all(), OrderDetail::$rules);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
 
         $orderDetail = OrderDetail::where('order_id', $request->order_id)
             ->where('food_id', $request->food_id)
@@ -68,7 +72,10 @@ class OrderDetailController extends Controller
      */
     public function update(Request $request, OrderDetail $orderDetail)
     {
-        $request->validate(OrderDetail::$update_rules);
+        $validator = Validator::make($request->all(), OrderDetail::$update_rules);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
         OrderDetail::where(['id' => $orderDetail->id])
             ->update(['quantity' => $request->quantity, 'pack_quantity' =>  $request->pack_quantity]);
         return OrderDetail::where('id', $orderDetail->id)->first();

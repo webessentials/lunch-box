@@ -32,7 +32,7 @@ class FoodController extends Controller
         $data = $request->all();
         $validator = Validator::make($data, Food::$rules);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
+            return response()->json(['error' => $validator->errors()], 400);
         }
 
         if (!empty($data['picture'])) {
@@ -67,7 +67,7 @@ class FoodController extends Controller
         $data = $request->all();
         $validator = Validator::make($data, Food::$rules);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
+            return response()->json(['error' => $validator->errors()], 400);
         }
         if (!empty($data['picture']) && $data['picture'] != $food->picture) {
             $name = time() . '_food.' . $request->file('picture')->guessExtension();

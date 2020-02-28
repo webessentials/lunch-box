@@ -9,6 +9,8 @@ use App\Http\Resources\FoodScheduleResource;
 use App\ScheduleFoodDetail;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class FoodScheduleController extends Controller
 {
@@ -30,12 +32,13 @@ class FoodScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(FoodSchedule::$rules);
-        $foodSchedule = null;
-
+        $validator = Validator::make($request->all(), FoodSchedule::$rules);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
         $foodSchedule = FoodSchedule::whereDate('date',$request->date)->first();
         if ($foodSchedule == null) {
-            $data['user_id'] = 1; //:TODO refactor when auth is implemented.
+            $data['user_id'] = Auth::id();
             $data['date'] = $request->date;
             $foodSchedule = FoodSchedule::create($data);
         }
