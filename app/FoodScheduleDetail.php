@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class FoodScheduleDetail extends Model
 {
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = "food_schedule_details";
+
     /**
      * @var array
      *

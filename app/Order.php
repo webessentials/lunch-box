@@ -15,7 +15,8 @@ class Order extends Model
         'note' => 'string',
         'food_id' => 'required|integer',
         'pack_quantity' => 'required|integer',
-        'quantity' => 'required|integer'
+        'quantity' => 'required|integer',
+        'unit_price' => 'required|regex:/^\d+(\.\d{1,2})?$/'
     ];
 
 
