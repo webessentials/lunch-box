@@ -2,7 +2,8 @@
     <div>
       <div class="status-bar align-items-center">
         <h4 class="ml-4 mb-0">Home</h4>
-        <button class="btn btn-primary ml-auto" @click="$router.push('/login')">Login</button>
+        <button class="btn btn-primary ml-auto" @click="$router.push('/login')" v-if="!checkToken()">Login</button>
+        <button class="btn btn-primary ml-auto" @click="$router.push('/login')" v-else>Logout</button>
       </div>
       <div class="container mt-4">
           <div class="card mb-3 p-3" v-for="food in foods">
@@ -16,13 +17,10 @@
                       </div>
                   </div>
                   <div class="col-md-4">
-                      <button class="btn btn-primary btn-block" @click="onOrder">Order</button>
+                      <button class="btn btn-primary btn-block" @click="onOrder" v-if="checkToken()">Order</button>
                   </div>
               </div>
           </div>
-      </div>
-      <div class="sticky-footer">
-        <button class="btn btn-primary btn-block" @click="$router.push('/foodlist')">Prepare menu</button>
       </div>
     </div>
 </template>
@@ -44,6 +42,9 @@
         methods: {
             onOrder: function () {
                 alert('Order form pop up');
+            },
+            checkToken() {
+              return !!window.localStorage.getItem('user_token');
             }
         }
     }

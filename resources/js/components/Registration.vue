@@ -126,6 +126,7 @@
         })
         .then(response => {
           if (response.status === 201) {
+            window.localStorage.setItem('user_token', response.data.token)
             this.$router.push('/home')
           }
         }).catch(error => {

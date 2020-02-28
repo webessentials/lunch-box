@@ -80,7 +80,20 @@
         return re.test(email);
       },
       checkAuthentication() {
-        this.$router.push('/foo');
+        axios.post('api/login', {
+          email: this.email,
+          password: this.password
+        })
+        .then(response => {
+          if (response.status === 200) {
+            window.localStorage.setItem('user_token', response.data.token)
+            if (response.data.role === 'admin') {
+              this.$router.push('/dashboard');
+            } else {
+              this.$router.push('/home');
+            }
+          }
+        })
       }
     }
   }

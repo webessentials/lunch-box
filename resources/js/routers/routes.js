@@ -9,18 +9,27 @@ import FoodList from '../components/FoodList'
 import OrderList from '../components/OrderList'
 import AddFood from '../components/AddFood'
 
-const routes = [
-  { path: '/', redirect: '/login' },
-  { path: '/foo', component: Foo },
-  { path: '/bar', component: Bar },
+let routes = [
+  { path: '/', redirect: '/home' },
   { path: '/login', component: Login },
   { path: '/home', component: HomePage },
-  { path: '/registration', component: Registeration },
-  { path: '/dashboard', component: Dashboard },
-  { path: '/ordering', component: Ordering },
-  { path: '/foodlist', component: FoodList },
-  { path: '/orderlist', component: OrderList },
-  { path: '/addfood', component: AddFood }
+  { path: '/registration', component: Registeration }
 ]
+
+if (window.user_token) {
+  routes = [
+    { path: '/', redirect: '/login' },
+    { path: '/foo', component: Foo },
+    { path: '/bar', component: Bar },
+    { path: '/login', component: Login },
+    { path: '/home', component: HomePage },
+    { path: '/registration', component: Registeration },
+    { path: '/dashboard', component: Dashboard },
+    { path: '/ordering', component: Ordering },
+    { path: '/foodlist', component: FoodList },
+    { path: '/orderlist', component: OrderList },
+    { path: '/addfood', component: AddFood }
+  ]
+}
 
 export default routes
