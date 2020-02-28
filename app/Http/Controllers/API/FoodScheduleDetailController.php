@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Food;
 use App\FoodSchedule;
 use App\FoodScheduleDetail;
 use App\Http\Resources\FoodScheduleDetailResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class FoodScheduleDetailController extends Controller
 {
@@ -28,32 +30,30 @@ class FoodScheduleDetailController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(FoodScheduleDetail::$rules);
-        $scheduleDetail = null;
+        $validator = Validator::make($request->all(), FoodScheduleDetail::$rules);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
 
-        $data['food_schedule_id'] = $request->food_schedule_id; //:TODO refactor when auth is implemented.
+        $data['food_schedule_id'] = $request->food_schedule_id;
         $data['food_id'] = $request->food_id;
-
-        $scheduleDetail = FoodScheduleDetail::where('food_id', $data['food_id'])
-                                            ->where('food_schedule_id', $data['food_schedule_id'])
-                                            ->first();
+        $scheduleDetail = FoodScheduleDetail::where($data)->first();
 
         if($scheduleDetail == null){
             $scheduleDetail = FoodScheduleDetail::create($data);
         }
-
         return $scheduleDetail;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\FoodScheduleDetail  $foodScheduleDetail
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(FoodScheduleDetail $foodScheduleDetail)
+    public function show($id)
     {
-        //
+        return FoodScheduleDetail::where('id', $id)->first();
     }
 
     /**
@@ -77,10 +77,6 @@ class FoodScheduleDetailController extends Controller
     public function destroy(FoodScheduleDetail $foodScheduleDetail)
     {
         $foodScheduleDetail->delete();
-        $schedule_detail = FoodScheduleDetail::where('food_schedule_id',$foodScheduleDetail->food_schedule_id)->first();
-        if($schedule_detail==null){
-            FoodSchedule::where('id',$foodScheduleDetail->food_schedule_id)->delete();
-        }
         return response($foodScheduleDetail, 204);
     }
 }

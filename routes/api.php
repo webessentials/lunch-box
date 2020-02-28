@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('food-schedule/today', 'API\FoodScheduleController@scheduled');
 
 Route::apiResource('users', 'API\UserController');
 Route::apiResource('order-details', 'API\OrderDetailController');

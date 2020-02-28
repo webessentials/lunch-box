@@ -2,18 +2,39 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Food;
 use App\FoodSchedule;
 use App\FoodScheduleDetail;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FoodScheduleResource;
 use App\ScheduleFoodDetail;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class FoodScheduleController extends Controller
 {
+    /**
+     * Register api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function scheduled() {
+        $foodSchedule = FoodSchedule::whereDate('date', Carbon::now()->format('y-m-d'))->first();
+        $foodScheduleDetail = FoodScheduleDetail::where('food_schedule_id', $foodSchedule->id)->get();
+
+        $scheduleDetails = array();
+        foreach ($foodScheduleDetail as $scheduleDetail) {
+            $food = Food::where('id', $scheduleDetail->id)->first();
+            $scheduleDetail['food'] = $food;
+            array_push($scheduleDetails, $scheduleDetail);
+        }
+        $foodSchedule['schedules'] = $scheduleDetails;
+
+        return $foodSchedule;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -58,7 +79,7 @@ class FoodScheduleController extends Controller
      */
     public function show(FoodSchedule $foodSchedule)
     {
-
+        return $foodSchedule;
     }
 
     /**

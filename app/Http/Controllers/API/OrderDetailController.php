@@ -18,7 +18,6 @@ class OrderDetailController extends Controller
     public function index()
     {
         return OrderDetailResource::collection(OrderDetail::all());
-        //return OrderDetailResource::collection(OrderDetail::where('order_id', 1)->get());
     }
 
     /**
@@ -80,7 +79,9 @@ class OrderDetailController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
         OrderDetail::where(['id' => $orderDetail->id])
-            ->update(['quantity' => $request->quantity, 'pack_quantity' =>  $request->pack_quantity]);
+            ->update(['quantity' => $request->quantity,
+                'pack_quantity' =>  $request->pack_quantity,
+                'unit_price' => $request->unit_price ]);
         return OrderDetail::where('id', $orderDetail->id)->first();
     }
 
