@@ -7,6 +7,7 @@ import Ordering from '../components/Ordering'
 import Dashboard from '../components/Dashboard'
 import FoodList from '../components/FoodList'
 import OrderList from '../components/OrderList'
+import AddFood from '../components/AddFood'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -18,7 +19,8 @@ const routes = [
   { path: '/dashboard', component: Dashboard },
   { path: '/ordering', component: Ordering },
   { path: '/foodlist', component: FoodList },
-  { path: '/orderlist', component: OrderList }
+  { path: '/orderlist', component: OrderList },
+  { path: '/addfood', component: AddFood }
 ]
 
 export default routes
