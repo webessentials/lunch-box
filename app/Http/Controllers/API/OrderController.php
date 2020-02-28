@@ -18,6 +18,19 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function paymentStatus(Request $request) {
+        $validator = Validator::make($request->all(), Order::$rule_payment);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+        return Order::where('id', $request->order_id)->update(['paid' => $request->paid]);
+    }
+
+    /**
+     * Register api
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function ordered() {
         $order = Order::where('user_id', Auth::id())
             ->whereDate('created_at', Carbon::now()->format('y-m-d'))
