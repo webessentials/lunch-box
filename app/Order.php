@@ -19,6 +19,11 @@ class Order extends Model
         'unit_price' => 'required|regex:/^\d+(\.\d{1,2})?$/'
     ];
 
+    public static $rule_payment = [
+       'order_id' => 'required|integer',
+       'paid' => 'required'
+    ];
+
 
     /**
      * The attributes that aren't mass assignable.

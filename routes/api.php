@@ -26,4 +26,6 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::apiResource('schedule-details','API\FoodScheduleDetailController');
     Route::apiResource('orders', 'API\OrderController');
     Route::get('order/today', 'API\OrderController@ordered');
+    Route::put('order/payment-status', 'API\OrderController@paymentStatus');
 });
+
