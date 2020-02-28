@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="status-bar align-items-center">
+      <span @click="$router.push('/home')">Back</span>
       <h4 class="ml-4 mb-0">Login</h4>
       <button class="btn btn-primary ml-auto" @click="$router.push('/registration')">Register</button>
     </div>
