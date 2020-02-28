@@ -18,7 +18,7 @@ let routes = [
 
 if (window.localStorage.getItem('user_token')) {
   routes = [
-    { path: '/', redirect: '/login' },
+    { path: '/', redirect: '/home' },
     { path: '/foo', component: Foo },
     { path: '/bar', component: Bar },
     { path: '/login', component: Login },
