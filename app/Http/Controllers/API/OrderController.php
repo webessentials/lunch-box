@@ -14,6 +14,21 @@ use Illuminate\Support\Facades\Validator;
 class OrderController extends Controller
 {
     /**
+     * Register api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function ordered() {
+        $order = Order::where('user_id', Auth::id())
+            ->whereDate('created_at', Carbon::now()->format('y-m-d'))
+            ->first();
+        if ($order != null) {
+            $orderDetail = OrderDetail::where('order_id', $order->id)->get();
+            $order['order_details'] = $orderDetail;
+        }
+        return  $order;
+    }
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

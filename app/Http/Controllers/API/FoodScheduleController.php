@@ -23,17 +23,18 @@ class FoodScheduleController extends Controller
      */
     public function scheduled() {
         $foodSchedule = FoodSchedule::whereDate('date', Carbon::now()->format('y-m-d'))->first();
-        $foodScheduleDetail = FoodScheduleDetail::where('food_schedule_id', $foodSchedule->id)->get();
+        if ($foodSchedule) {
+            $foodScheduleDetail = FoodScheduleDetail::where('food_schedule_id', $foodSchedule->id)->get();
 
-        $scheduleDetails = array();
-        foreach ($foodScheduleDetail as $scheduleDetail) {
-            $food = Food::where('id', $scheduleDetail->id)->first();
-            $scheduleDetail['food'] = $food;
-            array_push($scheduleDetails, $scheduleDetail);
+            $scheduleDetails = array();
+            foreach ($foodScheduleDetail as $scheduleDetail) {
+                $food = Food::where('id', $scheduleDetail->id)->first();
+                $scheduleDetail['food'] = $food;
+                array_push($scheduleDetails, $scheduleDetail);
+            }
+            $foodSchedule['schedules'] = $scheduleDetails;
+            return $foodSchedule;
         }
-        $foodSchedule['schedules'] = $scheduleDetails;
-
-        return $foodSchedule;
     }
     /**
      * Display a listing of the resource.
