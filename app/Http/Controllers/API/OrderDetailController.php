@@ -94,6 +94,9 @@ class OrderDetailController extends Controller
     public function destroy(OrderDetail $orderDetail)
     {
         $orderDetail->delete();
+        if(OrderDetail::where('food_schedule_id', $orderDetail->order_id)->count() == 0){
+            Order::where('id', $orderDetail->order_id)->delete();
+        }
         return response('Deleted', 204);
     }
 }

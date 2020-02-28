@@ -77,6 +77,9 @@ class FoodScheduleDetailController extends Controller
     public function destroy(FoodScheduleDetail $foodScheduleDetail)
     {
         $foodScheduleDetail->delete();
+        if(FoodScheduleDetail::where('food_schedule_id',$foodScheduleDetail->food_schedule_id)->count() == 0){
+            FoodSchedule::where('id',$foodScheduleDetail->food_schedule_id)->delete();
+        }
         return response($foodScheduleDetail, 204);
     }
 }
