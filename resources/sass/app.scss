@@ -15,24 +15,9 @@
 @import 'components/list-groups';
 @import 'components/cards';
 @import 'components/orderlist';
+@import 'components/ordering';
 
 // Partials
 @import 'partials/global';
 @import 'partials/sticky-footer';
 @import 'partials/status-bar';
-
-#Ordering {
-    .total {
-        font-size: 16px;
-        @include media-breakpoint-down(sm) {
-            font-size: 14px;
-        }
-    }
-    .footer {
-        @include media-breakpoint-down(sm) {
-            button {
-                width: 100%;
-            }
-        }
-    }
-}

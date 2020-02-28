@@ -1,0 +1,19 @@
+#app {
+    .sticky-footer {
+        button {
+            font-size: 22px;
+        }
+    }
+}
+#Ordering {
+    label {
+        font-size: 18px;
+    }
+    .footer {
+        @include media-breakpoint-down(sm) {
+            button {
+                width: 100%;
+            }
+        }
+    }
+}

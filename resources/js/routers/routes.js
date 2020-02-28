@@ -25,7 +25,7 @@ if (window.localStorage.getItem('user_token')) {
     { path: '/home', component: HomePage },
     { path: '/registration', component: Registeration },
     { path: '/dashboard', component: Dashboard },
-    { path: '/ordering', component: Ordering },
+    { path: '/ordering/:id', component: Ordering },
     { path: '/foodlist', component: FoodList },
     { path: '/orderlist', component: OrderList },
     { path: '/addfood', component: AddFood }

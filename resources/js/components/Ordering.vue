@@ -6,7 +6,7 @@
       </div>
       <form>
         <div class="container mt-4" id="Ordering">
-            <h3 class="text-center">You're ordering <b>{{foodName}}</b></h3>
+            <h3 class="text-center">You're ordering <b>{{food.name}}</b></h3>
             <div class="form-group">
                 <label for="qty">Qty</label>
                 <div class="input-group">
@@ -27,28 +27,53 @@
                 </div>
             </div>
             <div class="form-group">
-                <p class="total">Total:&nbsp;<b>${{total}}</b></p>
+                <h3 class="total">Total:&nbsp;<b>${{total}}</b></h3>
             </div>
         </div>
         <div class="sticky-footer">
-          <button class="btn btn-primary btn-block">Create food</button>
+          <button class="btn btn-primary btn-block" @click="onConfirm">Confirm</button>
         </div>
       </form>
     </div>
 </template>
 
 <script>
+    import axios from 'axios';
+
     export default {
         data() {
             return {
-                foodName: 'Rice',
+                food: {},
                 qty: 1,
-                total: 5
+                note: 'abc',
+                pack_quantity: 0
             }
         },
+        computed: {
+          total() {
+              return this.food.price * this.qty;
+          }
+        },
         methods: {
+            onConfirm: function() {
+                axios.post('api/orders', {
+                    amount: this.total,
+                    note: this.note,
+                    food_id: this.food.id,
+                    pack_quantity: this.pack_quantity,
+                    quantity: this.qty
+                }).then(res => {
+                    console.log(res);
+                    if(res === 201) {
+                        this.$router.push('/home');
+                    }
+                }).catch(err => console.log(err));
+            },
             fetchOrder: function () {
-                alert('Fetch order from user ordered.');
+                axios.get(`api/foods/${this.$route.params.id}`)
+                .then(res => {
+                    this.food = res.data;
+                })
             },
             onCount: function (action) {
                 if(action === 'plus') {
