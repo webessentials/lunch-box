@@ -2,7 +2,7 @@
   <div>
     <div class="status-bar align-items-center">
       <h4 class="ml-4 mb-0">Dashboard</h4>
-      <button class="btn btn-primary ml-auto">Logout</button>
+      <button class="btn btn-primary ml-auto" @click="logout">Logout</button>
     </div>
     <div class="container mt-4">
       <div class="d-flex justify-content-center">
@@ -40,12 +40,14 @@
 </template>
 
 <script>
+    import Logout from '../mixins/logout.vue';
   export default {
     data() {
       return {
 
       }
     },
+    mixins: [Logout],
     mounted() {
       this.fetchOrders()
     },
