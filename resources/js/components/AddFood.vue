@@ -13,14 +13,12 @@
                 <label for="price">Price</label>
                 <input type="number" step="0.01" class="form-control" id="price" v-model="price"/>
             </div>
-            <button class="btn btn-primary btn-block" @click="onAddFood">Add Food</button>
+            <button class="btn btn-primary btn-block" @click.prevent="onAddFood">Add Food</button>
         </form>
     </div>
 </template>
 
 <script>
-    import axios from 'axios';
-
     export default {
         data() {
             return {
@@ -46,7 +44,9 @@
                         'content-type':'multipart/form-data'
                     }
                 }).then(res => {
-                    console.log(res);
+                    if (res.status === 201) {
+                        this.$router.push('/foodlist');
+                    }
                 }).catch(err => console.log(err));
             }
         }

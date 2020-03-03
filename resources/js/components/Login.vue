@@ -91,7 +91,8 @@
         })
         .then(response => {
           if (response.status === 200) {
-            window.localStorage.setItem('user_token', response.data.token)
+            localStorage.setItem('user_token', response.data.token);
+            axios.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
             if (response.data.role === 'admin') {
               this.$router.push('/dashboard');
             } else {

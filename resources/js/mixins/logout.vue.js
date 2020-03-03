@@ -1,7 +1,7 @@
 const Logout = {
     methods: {
         checkToken() {
-            return !!window.localStorage.getItem('user_token');
+            return !!localStorage.getItem('user_token');
         },
         logout() {
             if (this.checkToken()) {

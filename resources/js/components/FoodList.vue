@@ -15,7 +15,7 @@
       </ul>
     </div>
     <div class="sticky-footer">
-      <button class="btn btn-primary btn-block">Create food</button>
+      <button class="btn btn-primary btn-block" @click="$router.push('/addfood')">Create food</button>
     </div>
   </div>
 </template>
