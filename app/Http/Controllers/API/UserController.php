@@ -43,6 +43,17 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+        return response()->json(['message' => 'logged out']);
+    }
+
+    /**
+     * Register api
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function register(Request $request) {
         $validator = Validator::make($request->all(), User::$rules);
         if ($validator->fails()) {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="status-bar align-items-center">
-      <span @click="$router.push('/home')">Back</span>
+      <span @click="$router.push('/')">Back</span>
       <h4 class="ml-4 mb-0">Login</h4>
       <button class="btn btn-primary ml-auto" @click="$router.push('/registration')">Register</button>
     </div>
@@ -95,7 +95,7 @@
             if (response.data.role === 'admin') {
               this.$router.push('/dashboard');
             } else {
-              this.$router.push('/home');
+              this.$router.push('/');
             }
           }
         })

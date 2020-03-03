@@ -3,7 +3,7 @@
       <div class="status-bar align-items-center">
         <h4 class="ml-4 mb-0">Home</h4>
         <button class="btn btn-primary ml-auto" @click="$router.push('/login')" v-if="!checkToken()">Login</button>
-        <button class="btn btn-primary ml-auto" @click="$router.push('/login')" v-else>Logout</button>
+        <button class="btn btn-primary ml-auto" @click="logout" v-else>Logout</button>
       </div>
       <div class="container mt-4">
           <div class="d-block" v-if="!foods.length">
@@ -32,12 +32,14 @@
 </template>
 
 <script>
+    import Logout from '../mixins/logout.vue';
     export default {
         data() {
             return {
                 foods: []
             }
         },
+        mixins: [Logout],
         methods: {
             checkToken() {
               return !!window.localStorage.getItem('user_token');

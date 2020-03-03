@@ -13940,34 +13940,61 @@ a.text-dark:focus {
   color: #000000;
 }
 
-body {
-  background-color: #1861ba;
-  color: #FFFFFF;
+.card-body {
+  color: #000000;
 }
 
-.sticky-footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-}
-
-.sticky-footer .btn {
-  border-radius: 0;
-}
-
-#Ordering .total {
+#OrderList .card-body {
+  color: #000000;
   font-size: 16px;
 }
 
-@media (max-width: 767.98px) {
-  #Ordering .total {
-    font-size: 14px;
-  }
+#app .sticky-footer button {
+  font-size: 22px;
+}
+
+#Ordering label {
+  font-size: 18px;
 }
 
 @media (max-width: 767.98px) {
   #Ordering .footer button {
     width: 100%;
   }
+}
+
+body {
+  background-color: #1861ba;
+  color: #FFFFFF;
+}
+
+.content {
+  max-width: 500px;
+  margin: 0 auto;
+  position: relative;
+  margin-bottom: 50px;
+}
+
+.sticky-footer {
+  position: fixed;
+  bottom: 0;
+  max-width: 500px;
+  width: 100%;
+}
+
+.sticky-footer .btn {
+  border-radius: 0;
+  height: 50px;
+}
+
+.status-bar {
+  background-color: #1850ab;
+  display: flex;
+  height: 50px;
+  padding: 15px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
