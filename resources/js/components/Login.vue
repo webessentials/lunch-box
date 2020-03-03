@@ -1,48 +1,54 @@
 <template>
   <div>
-    <div class="status-bar align-items-center">
-      <span @click="$router.push('/')">Back</span>
-      <h4 class="ml-4 mb-0">Login</h4>
+    <div class="nav-sticky navbar navbar-expand navbar-light bg-white">
+      <span class="btn-link" @click="$router.push('/')">
+          <svg class="bi bi-chevron-left" width="24" height="24" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M13.354 3.646a.5.5 0 010 .708L7.707 10l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" clip-rule="evenodd"></path>
+            </svg>
+      </span>
+      <h4 class="ml-1 mb-0">Login</h4>
       <button class="btn btn-primary ml-auto" @click="$router.push('/registration')">Register</button>
     </div>
 
-    <form @submit="checkForm">
       <div class="container mt-4">
-          <div class="d-inline-flex w-100 mb-4 justify-content-center">
-              <div class="logo">
-                  <img src="/images/logo.png" alt="logo" class="img-fluid">
+          <form class="card mb-3 p-3">
+              <div class="container mt-4">
+                  <div class="d-inline-flex w-100 mb-4 justify-content-center">
+                      <div class="logo mr-3">
+                          <img src="/images/logo.png" alt="logo" class="img-fluid">
+                      </div>
+                      <h3 class="text-center mt-3">Lunch Box</h3>
+                  </div>
+                  <div class="form-group">
+                      <label for="inputEmail">Email address</label>
+                      <input type="text" class="form-control" :class="{ 'is-invalid' : errors.emptyEmail || errors.invalidEmail }" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter your email" v-model="email">
+                      <div class="invalid-feedback" v-if="errors.emptyEmail">
+                          Enter your email address.
+                      </div>
+                      <div class="invalid-feedback" v-if="errors.invalidEmail">
+                          Invalid email address.
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label for="inputPassword">Password</label>
+                      <input type="password" class="form-control" :class="{ 'is-invalid' : errors.password || errors.shortPassword }" id="inputPassword" placeholder="Password" v-model="password">
+                      <div class="invalid-feedback" v-if="errors.password">
+                          Enter your password.
+                      </div>
+                      <div class="invalid-feedback" v-if="errors.shortPassword">
+                          Password must be more than 6 characters.
+                      </div>
+                  </div>
+                  <div class="form-check">
+                      <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                      <label class="form-check-label" for="exampleCheck1">Remember me</label>
+                  </div>
               </div>
-              <h3 class="text-center mt-3">Lunch Box</h3>
-          </div>
-          <div class="form-group">
-            <label for="inputEmail">Email address</label>
-            <input type="text" class="form-control" :class="{ 'is-invalid' : errors.emptyEmail || errors.invalidEmail }" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter your email" v-model="email">
-            <div class="invalid-feedback" v-if="errors.emptyEmail">
-              Enter your email address.
-            </div>
-            <div class="invalid-feedback" v-if="errors.invalidEmail">
-              Invalid email address.
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="inputPassword">Password</label>
-            <input type="password" class="form-control" :class="{ 'is-invalid' : errors.password || errors.shortPassword }" id="inputPassword" placeholder="Password" v-model="password">
-            <div class="invalid-feedback" v-if="errors.password">
-              Enter your password.
-            </div>
-            <div class="invalid-feedback" v-if="errors.shortPassword">
-              Password must be more than 6 characters.
-            </div>
-          </div>
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Remember me</label>
-          </div>
-        </div>
-        <div class="sticky-footer">
-          <button type="submit" class="btn btn-primary btn-block mt-4">Login</button>
-        </div>
-      </form>
+          </form>
+      </div>
+      <div class="sticky-footer">
+          <button type="button" @click="checkForm" class="btn btn-primary btn-block mt-4">Login</button>
+      </div>
     </div>
 </template>
 
@@ -91,13 +97,15 @@
         })
         .then(response => {
           if (response.status === 200) {
-            localStorage.setItem('user_token', response.data.token);
-            axios.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
-            if (response.data.role === 'admin') {
-              this.$router.push('/dashboard');
-            } else {
-              this.$router.push('/');
-            }
+              const isAdmin = response.data.role === 'admin';
+              localStorage.setItem('user_token', response.data.token);
+              localStorage.setItem('is_admin', isAdmin);
+              axios.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
+              if (isAdmin) {
+                  this.$router.push('/dashboard');
+              } else {
+                  this.$router.push('/');
+              }
           }
         })
       }

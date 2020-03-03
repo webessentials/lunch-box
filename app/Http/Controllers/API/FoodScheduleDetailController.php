@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Food;
-use App\FoodSchedule;
+use App\Schedule;
 use App\FoodScheduleDetail;
 use App\Http\Resources\FoodScheduleDetailResource;
 use App\Http\Controllers\Controller;
@@ -78,7 +78,7 @@ class FoodScheduleDetailController extends Controller
     {
         $foodScheduleDetail->delete();
         if(FoodScheduleDetail::where('food_schedule_id',$foodScheduleDetail->food_schedule_id)->count() == 0){
-            FoodSchedule::where('id',$foodScheduleDetail->food_schedule_id)->delete();
+            Schedule::where('id',$foodScheduleDetail->food_schedule_id)->delete();
         }
         return response($foodScheduleDetail, 204);
     }

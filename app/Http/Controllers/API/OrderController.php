@@ -71,30 +71,16 @@ class OrderController extends Controller
         $data['user_id'] = Auth::id();
         $data['amount'] = $request->amount;
         $data['note'] = $request->note;
-        if ($order == null) {
-            //TODO: store payment
-            unset($data['payment_type']);
-            $order = Order::create($data);
-        }else {
-            if(Order::where('id', $order->id)->update($data) > 0){
-                $order = Order::where(['id' => $order->id])->first();
-            }
-        }
+        $order = Order::create($data);
 
         $orderDetail = [];
         $orderDetail['order_id']  = $order->id;
         $orderDetail['food_id'] = $request->food_id;
-        $detail = OrderDetail::where($orderDetail)->first();
 
         $orderDetail['quantity'] = $request->quantity;
         $orderDetail['pack_quantity'] = $request->pack_quantity;
         $orderDetail['unit_price'] = $request->unit_price;
-
-        if($detail == null) {
-            OrderDetail::create($orderDetail);
-        }else {
-            OrderDetail::where(['id' => $detail->id])->update($orderDetail);
-        }
+        OrderDetail::create($orderDetail);
         return $order;
     }
 

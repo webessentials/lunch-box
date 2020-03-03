@@ -31,4 +31,20 @@ class OrderDetail extends Model
         'pack_quantity' => 'required|integer',
         'unit_price' => 'required'
     ];
+
+    /**
+     * Get the post that owns the comment.
+     */
+    public function order()
+    {
+        return $this->belongsTo('App\Order');
+    }
+
+    /**
+     * Get the post that owns the comment.
+     */
+    public function food()
+    {
+        return $this->belongsTo('App\Food');
+    }
 }

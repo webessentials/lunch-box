@@ -1,8 +1,13 @@
 <template>
   <div>
-    <div class="status-bar align-items-center">
-      <span @click="$router.push('/login')">Back</span>
-      <h4 class="ml-4 mb-0">Registration</h4>
+    <div class="nav-sticky navbar navbar-expand navbar-light bg-white">
+      <span class="btn-link" @click="$router.push('/login')">
+          <svg class="bi bi-chevron-left" width="24" height="24" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M13.354 3.646a.5.5 0 010 .708L7.707 10l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" clip-rule="evenodd"></path>
+            </svg>
+      </span>
+      <h4 class="ml-2 py-2 mb-0">Registration</h4>
+        <div class="action ml-auto"></div>
     </div>
 
     <form @submit="checkForm">
@@ -126,8 +131,9 @@
         })
         .then(response => {
           if (response.status === 201) {
-            window.localStorage.setItem('user_token', response.data.token)
-            this.$router.push('/home')
+            localStorage.setItem('user_token', response.data.token);
+            axios.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
+            this.$router.push('/')
           }
         }).catch(error => {
           console.log('Error')

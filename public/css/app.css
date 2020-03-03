@@ -13936,6 +13936,42 @@ a.text-dark:focus {
   border-radius: 50px;
 }
 
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+.custom-file-input::before {
+  content: "Click to Select Image";
+  display: inline-block;
+  background-color: #eeeeee;
+  border-radius: 3px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+  width: 100%;
+  height: 200px;
+  text-align: center;
+  padding-top: 90px;
+}
+
+.custom-file-input:hover::before {
+  border-color: black;
+}
+
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+.custom-file-input {
+  width: 100%;
+  height: 200px;
+  opacity: 1;
+}
+
 .list-group-item {
   color: #000000;
 }
@@ -13964,8 +14000,7 @@ a.text-dark:focus {
 }
 
 body {
-  background-color: #1861ba;
-  color: #FFFFFF;
+  color: #6b6f8d;
 }
 
 .content {
