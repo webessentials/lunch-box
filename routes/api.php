@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
 
-Route::get('food-schedule/today', 'API\FoodScheduleController@scheduled');
+Route::get('schedule/today', 'API\ScheduleController@today');
 
 Route::apiResource('users', 'API\UserController');
 Route::apiResource('order-details', 'API\OrderDetailController');
@@ -27,7 +27,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::apiResource('users', 'API\UserController');
 
     Route::apiResource('foods', 'API\FoodController');
-    Route::apiResource('schedules', 'API\FoodScheduleController');
+    Route::apiResource('schedules', 'API\ScheduleController');
     Route::apiResource('schedule-details','API\FoodScheduleDetailController');
     Route::apiResource('orders', 'API\OrderController');
     Route::get('order/today', 'API\OrderController@ordered');

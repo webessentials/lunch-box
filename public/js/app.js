@@ -1908,8 +1908,35 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _mixins_logout_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixins/logout.vue */ "./resources/js/mixins/logout.vue.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1939,16 +1966,19 @@ __webpack_require__.r(__webpack_exports__);
       price: 0
     };
   },
+  mixins: [_mixins_logout_vue__WEBPACK_IMPORTED_MODULE_0__["default"]],
   methods: {
     getFile: function getFile(event) {
       this.file = event.target.files[0];
     },
     onAddFood: function onAddFood() {
+      var _this = this;
+
       var formData = new FormData();
       formData.append('name', this.name);
       formData.append('price', this.price);
       formData.append('picture', this.file);
-      axios__WEBPACK_IMPORTED_MODULE_0___default()({
+      axios({
         url: 'api/foods',
         method: 'post',
         data: formData,
@@ -1956,7 +1986,9 @@ __webpack_require__.r(__webpack_exports__);
           'content-type': 'multipart/form-data'
         }
       }).then(function (res) {
-        console.log(res);
+        if (res.status === 201) {
+          _this.$router.push('/foodlist');
+        }
       })["catch"](function (err) {
         return console.log(err);
       });
@@ -1976,6 +2008,24 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_logout_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixins/logout.vue */ "./resources/js/mixins/logout.vue.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2046,6 +2096,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mixins_logout_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixins/logout.vue */ "./resources/js/mixins/logout.vue.js");
 //
 //
 //
@@ -2068,6 +2119,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2075,6 +2150,7 @@ __webpack_require__.r(__webpack_exports__);
       todayMenu: []
     };
   },
+  mixins: [_mixins_logout_vue__WEBPACK_IMPORTED_MODULE_0__["default"]],
   mounted: function mounted() {
     this.fetchFoods();
     this.fetchTodayMenu();
@@ -2083,7 +2159,7 @@ __webpack_require__.r(__webpack_exports__);
     fetchFoods: function fetchFoods() {
       var _this = this;
 
-      axios.get('api/foods').then(function (response) {
+      axios.get('/api/foods').then(function (response) {
         _this.foodList = response.data.data;
       });
     },
@@ -2091,9 +2167,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.todayMenu = [];
-      axios.get('api/food-schedule/today').then(function (response) {
-        if (response.data.schedules.length) {
-          response.data.schedules.forEach(function (food) {
+      axios.get('/api/schedule/today').then(function (response) {
+        if (response.data.data.length) {
+          response.data.data.forEach(function (food) {
             _this2.todayMenu.push(food.food_id);
           });
         }
@@ -2133,6 +2209,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_logout_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixins/logout.vue */ "./resources/js/mixins/logout.vue.js");
+/* harmony import */ var _mixins_user__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../mixins/user */ "./resources/js/mixins/user.js");
 //
 //
 //
@@ -2166,6 +2243,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2173,7 +2271,7 @@ __webpack_require__.r(__webpack_exports__);
       foods: []
     };
   },
-  mixins: [_mixins_logout_vue__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  mixins: [_mixins_logout_vue__WEBPACK_IMPORTED_MODULE_0__["default"], _mixins_user__WEBPACK_IMPORTED_MODULE_1__["default"]],
   methods: {
     checkToken: function checkToken() {
       return !!window.localStorage.getItem('user_token');
@@ -2181,13 +2279,11 @@ __webpack_require__.r(__webpack_exports__);
     fetchFoods: function fetchFoods() {
       var _this = this;
 
-      if (this.checkToken()) {
-        axios.get('/api/food-schedule/today').then(function (res) {
-          _this.foods = res.data.schedules;
-        })["catch"](function (err) {
-          return console.log(err);
-        });
-      }
+      axios.get('/api/schedule/today').then(function (res) {
+        _this.foods = res.data.data;
+      })["catch"](function (err) {
+        return console.log(err);
+      });
     },
     getOrderList: function getOrderList() {}
   },
@@ -2208,6 +2304,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2299,9 +2401,12 @@ __webpack_require__.r(__webpack_exports__);
         password: this.password
       }).then(function (response) {
         if (response.status === 200) {
-          window.localStorage.setItem('user_token', response.data.token);
+          var isAdmin = response.data.role === 'admin';
+          localStorage.setItem('user_token', response.data.token);
+          localStorage.setItem('is_admin', isAdmin);
+          axios.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
 
-          if (response.data.role === 'admin') {
+          if (isAdmin) {
             _this.$router.push('/dashboard');
           } else {
             _this.$router.push('/');
@@ -2368,8 +2473,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -2409,7 +2512,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2429,7 +2535,7 @@ __webpack_require__.r(__webpack_exports__);
     onConfirm: function onConfirm() {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/orders', {
+      axios.post('/api/orders', {
         amount: this.total,
         unit_price: this.food.price,
         note: this.note,
@@ -2438,10 +2544,8 @@ __webpack_require__.r(__webpack_exports__);
         pack_quantity: this.pack_quantity,
         quantity: this.qty
       }).then(function (res) {
-        console.log(res);
-
         if (res.status === 201) {
-          _this.$router.push('/home');
+          _this.$router.push('/');
         }
       })["catch"](function (err) {
         return console.log(err);
@@ -2450,7 +2554,7 @@ __webpack_require__.r(__webpack_exports__);
     fetchOrder: function fetchOrder() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/foods/".concat(this.$route.params.id)).then(function (res) {
+      axios.get("/api/foods/".concat(this.$route.params.id)).then(function (res) {
         _this2.food = res.data;
       });
     },
@@ -2480,6 +2584,11 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2608,9 +2717,10 @@ __webpack_require__.r(__webpack_exports__);
         'password_confirmation': this.confirmedPassword
       }).then(function (response) {
         if (response.status === 201) {
-          window.localStorage.setItem('user_token', response.data.token);
+          localStorage.setItem('user_token', response.data.token);
+          axios.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
 
-          _this.$router.push('/home');
+          _this.$router.push('/');
         }
       })["catch"](function (error) {
         console.log('Error');
@@ -38637,83 +38747,234 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("form", [
-      _c("div", { staticClass: "form-group" }, [
-        _c("label", { attrs: { for: "image" } }, [
-          _vm._v("Choose your food's image")
-        ]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control-file",
-          attrs: { type: "file", id: "image" },
-          on: {
-            change: function($event) {
-              return _vm.getFile($event)
-            }
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-group" }, [
-        _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.name,
-              expression: "name"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: { type: "text", id: "name" },
-          domProps: { value: _vm.name },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "nav-sticky navbar navbar-expand navbar-light bg-white" },
+      [
+        _c(
+          "span",
+          {
+            staticClass: "btn-link",
+            on: {
+              click: function($event) {
+                return _vm.$router.push("/foodlist")
               }
-              _vm.name = $event.target.value
             }
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-group" }, [
-        _c("label", { attrs: { for: "price" } }, [_vm._v("Price")]),
+          },
+          [
+            _c(
+              "svg",
+              {
+                staticClass: "bi bi-chevron-left",
+                attrs: {
+                  width: "24",
+                  height: "24",
+                  viewBox: "0 0 20 20",
+                  fill: "currentColor",
+                  xmlns: "http://www.w3.org/2000/svg"
+                }
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    "fill-rule": "evenodd",
+                    d:
+                      "M13.354 3.646a.5.5 0 010 .708L7.707 10l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z",
+                    "clip-rule": "evenodd"
+                  }
+                })
+              ]
+            )
+          ]
+        ),
         _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.price,
-              expression: "price"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: { type: "number", step: "0.01", id: "price" },
-          domProps: { value: _vm.price },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.price = $event.target.value
-            }
-          }
-        })
-      ]),
-      _vm._v(" "),
+        _c("h4", { staticClass: "ml-1 mb-0" }, [_vm._v("Add New Food")]),
+        _vm._v(" "),
+        _c("ul", { staticClass: "navbar-nav mt-2 mt-md-0 ml-auto" }, [
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link",
+                attrs: { href: "javascript:;" },
+                on: {
+                  click: function($event) {
+                    return _vm.$router.push("/")
+                  }
+                }
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "bi bi-house",
+                    attrs: {
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 20 20",
+                      fill: "currentColor",
+                      xmlns: "http://www.w3.org/2000/svg"
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M9.646 3.146a.5.5 0 01.708 0l6 6a.5.5 0 01.146.354v7a.5.5 0 01-.5.5h-4.5a.5.5 0 01-.5-.5v-4H9v4a.5.5 0 01-.5.5H4a.5.5 0 01-.5-.5v-7a.5.5 0 01.146-.354l6-6zM4.5 9.707V16H8v-4a.5.5 0 01.5-.5h3a.5.5 0 01.5.5v4h3.5V9.707l-5.5-5.5-5.5 5.5z",
+                        "clip-rule": "evenodd"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d: "M15 4.5V8l-2-2V4.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z",
+                        "clip-rule": "evenodd"
+                      }
+                    })
+                  ]
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link",
+                attrs: { href: "javascript:;" },
+                on: { click: _vm.logout }
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "bi bi-box-arrow-right",
+                    attrs: {
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 20 20",
+                      fill: "currentColor",
+                      xmlns: "http://www.w3.org/2000/svg"
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M13.646 13.354a.5.5 0 010-.708L16.293 10l-2.647-2.646a.5.5 0 01.708-.708l3 3a.5.5 0 010 .708l-3 3a.5.5 0 01-.708 0z",
+                        "clip-rule": "evenodd"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M6.5 10a.5.5 0 01.5-.5h9a.5.5 0 010 1H7a.5.5 0 01-.5-.5z",
+                        "clip-rule": "evenodd"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M4 15.5A1.5 1.5 0 012.5 14V6A1.5 1.5 0 014 4.5h7A1.5 1.5 0 0112.5 6v1.5a.5.5 0 01-1 0V6a.5.5 0 00-.5-.5H4a.5.5 0 00-.5.5v8a.5.5 0 00.5.5h7a.5.5 0 00.5-.5v-1.5a.5.5 0 011 0V14a1.5 1.5 0 01-1.5 1.5H4z",
+                        "clip-rule": "evenodd"
+                      }
+                    })
+                  ]
+                )
+              ]
+            )
+          ])
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "container mt-4" }, [
       _c(
-        "button",
-        {
-          staticClass: "btn btn-primary btn-block",
-          on: { click: _vm.onAddFood }
-        },
-        [_vm._v("Add Food")]
+        "form",
+        { staticClass: "card mb-3 p-3", on: { submit: _vm.onAddFood } },
+        [
+          _c("div", { staticClass: "form-group" }, [
+            _c("input", {
+              staticClass: "custom-file-input",
+              attrs: { type: "file", id: "image" },
+              on: {
+                change: function($event) {
+                  return _vm.getFile($event)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.name,
+                  expression: "name"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", required: "", id: "name" },
+              domProps: { value: _vm.name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.name = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "price" } }, [_vm._v("Price")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.price,
+                  expression: "price"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "number", step: "0.01", id: "price" },
+              domProps: { value: _vm.price },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.price = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary btn-block",
+              attrs: { type: "submit" }
+            },
+            [_vm._v("Add Food")]
+          )
+        ]
       )
     ])
   ])
@@ -38741,15 +39002,117 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "status-bar align-items-center" }, [
-      _c("h4", { staticClass: "ml-4 mb-0" }, [_vm._v("Dashboard")]),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-primary ml-auto", on: { click: _vm.logout } },
-        [_vm._v("Logout")]
-      )
-    ]),
+    _c(
+      "div",
+      { staticClass: "nav-sticky navbar navbar-expand navbar-light bg-white" },
+      [
+        _c("h4", { staticClass: "ml-2 mb-0" }, [_vm._v("Dashboard")]),
+        _vm._v(" "),
+        _c("ul", { staticClass: "navbar-nav mt-2 mt-md-0 ml-auto" }, [
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link",
+                attrs: { href: "javascript:;" },
+                on: {
+                  click: function($event) {
+                    return _vm.$router.push("/")
+                  }
+                }
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "bi bi-house",
+                    attrs: {
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 20 20",
+                      fill: "currentColor",
+                      xmlns: "http://www.w3.org/2000/svg"
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M9.646 3.146a.5.5 0 01.708 0l6 6a.5.5 0 01.146.354v7a.5.5 0 01-.5.5h-4.5a.5.5 0 01-.5-.5v-4H9v4a.5.5 0 01-.5.5H4a.5.5 0 01-.5-.5v-7a.5.5 0 01.146-.354l6-6zM4.5 9.707V16H8v-4a.5.5 0 01.5-.5h3a.5.5 0 01.5.5v4h3.5V9.707l-5.5-5.5-5.5 5.5z",
+                        "clip-rule": "evenodd"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d: "M15 4.5V8l-2-2V4.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z",
+                        "clip-rule": "evenodd"
+                      }
+                    })
+                  ]
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link",
+                attrs: { href: "javascript:;" },
+                on: { click: _vm.logout }
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "bi bi-box-arrow-right",
+                    attrs: {
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 20 20",
+                      fill: "currentColor",
+                      xmlns: "http://www.w3.org/2000/svg"
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M13.646 13.354a.5.5 0 010-.708L16.293 10l-2.647-2.646a.5.5 0 01.708-.708l3 3a.5.5 0 010 .708l-3 3a.5.5 0 01-.708 0z",
+                        "clip-rule": "evenodd"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M6.5 10a.5.5 0 01.5-.5h9a.5.5 0 010 1H7a.5.5 0 01-.5-.5z",
+                        "clip-rule": "evenodd"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M4 15.5A1.5 1.5 0 012.5 14V6A1.5 1.5 0 014 4.5h7A1.5 1.5 0 0112.5 6v1.5a.5.5 0 01-1 0V6a.5.5 0 00-.5-.5H4a.5.5 0 00-.5.5v8a.5.5 0 00.5.5h7a.5.5 0 00.5-.5v-1.5a.5.5 0 011 0V14a1.5 1.5 0 01-1.5 1.5H4z",
+                        "clip-rule": "evenodd"
+                      }
+                    })
+                  ]
+                )
+              ]
+            )
+          ])
+        ])
+      ]
+    ),
     _vm._v(" "),
     _vm._m(0),
     _vm._v(" "),
@@ -38776,7 +39139,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "container mt-4" }, [
       _c("div", { staticClass: "d-flex justify-content-center" }, [
-        _c("button", { staticClass: "btn btn-light btn-circle" }, [
+        _c("button", { staticClass: "btn btn-primary btn-circle" }, [
           _vm._v("\n        15\n      ")
         ]),
         _vm._v(" "),
@@ -38863,21 +39226,154 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "status-bar align-items-center" }, [
-      _c(
-        "span",
-        {
-          on: {
-            click: function($event) {
-              return _vm.$router.push("/dashboard")
+    _c(
+      "div",
+      { staticClass: "nav-sticky navbar navbar-expand navbar-light bg-white" },
+      [
+        _c(
+          "span",
+          {
+            staticClass: "btn-link",
+            on: {
+              click: function($event) {
+                return _vm.$router.push("/dashboard")
+              }
             }
-          }
-        },
-        [_vm._v("Back")]
-      ),
-      _vm._v(" "),
-      _c("h4", { staticClass: "ml-4 mb-0" }, [_vm._v("Food List")])
-    ]),
+          },
+          [
+            _c(
+              "svg",
+              {
+                staticClass: "bi bi-chevron-left",
+                attrs: {
+                  width: "24",
+                  height: "24",
+                  viewBox: "0 0 20 20",
+                  fill: "currentColor",
+                  xmlns: "http://www.w3.org/2000/svg"
+                }
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    "fill-rule": "evenodd",
+                    d:
+                      "M13.354 3.646a.5.5 0 010 .708L7.707 10l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z",
+                    "clip-rule": "evenodd"
+                  }
+                })
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("h4", { staticClass: "ml-1 mb-0" }, [_vm._v("Food List")]),
+        _vm._v(" "),
+        _c("ul", { staticClass: "navbar-nav mt-2 mt-md-0 ml-auto" }, [
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link",
+                attrs: { href: "javascript:;" },
+                on: {
+                  click: function($event) {
+                    return _vm.$router.push("/")
+                  }
+                }
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "bi bi-house",
+                    attrs: {
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 20 20",
+                      fill: "currentColor",
+                      xmlns: "http://www.w3.org/2000/svg"
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M9.646 3.146a.5.5 0 01.708 0l6 6a.5.5 0 01.146.354v7a.5.5 0 01-.5.5h-4.5a.5.5 0 01-.5-.5v-4H9v4a.5.5 0 01-.5.5H4a.5.5 0 01-.5-.5v-7a.5.5 0 01.146-.354l6-6zM4.5 9.707V16H8v-4a.5.5 0 01.5-.5h3a.5.5 0 01.5.5v4h3.5V9.707l-5.5-5.5-5.5 5.5z",
+                        "clip-rule": "evenodd"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d: "M15 4.5V8l-2-2V4.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z",
+                        "clip-rule": "evenodd"
+                      }
+                    })
+                  ]
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link",
+                attrs: { href: "javascript:;" },
+                on: { click: _vm.logout }
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "bi bi-box-arrow-right",
+                    attrs: {
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 20 20",
+                      fill: "currentColor",
+                      xmlns: "http://www.w3.org/2000/svg"
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M13.646 13.354a.5.5 0 010-.708L16.293 10l-2.647-2.646a.5.5 0 01.708-.708l3 3a.5.5 0 010 .708l-3 3a.5.5 0 01-.708 0z",
+                        "clip-rule": "evenodd"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M6.5 10a.5.5 0 01.5-.5h9a.5.5 0 010 1H7a.5.5 0 01-.5-.5z",
+                        "clip-rule": "evenodd"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M4 15.5A1.5 1.5 0 012.5 14V6A1.5 1.5 0 014 4.5h7A1.5 1.5 0 0112.5 6v1.5a.5.5 0 01-1 0V6a.5.5 0 00-.5-.5H4a.5.5 0 00-.5.5v8a.5.5 0 00.5.5h7a.5.5 0 00.5-.5v-1.5a.5.5 0 011 0V14a1.5 1.5 0 01-1.5 1.5H4z",
+                        "clip-rule": "evenodd"
+                      }
+                    })
+                  ]
+                )
+              ]
+            )
+          ])
+        ])
+      ]
+    ),
     _vm._v(" "),
     _c("div", { staticClass: "container mt-4" }, [
       _c(
@@ -38928,21 +39424,23 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(0)
+    _c("div", { staticClass: "sticky-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary btn-block",
+          on: {
+            click: function($event) {
+              return _vm.$router.push("/addfood")
+            }
+          }
+        },
+        [_vm._v("Create food")]
+      )
+    ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "sticky-footer" }, [
-      _c("button", { staticClass: "btn btn-primary btn-block" }, [
-        _vm._v("Create food")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -38965,31 +39463,127 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "status-bar align-items-center" }, [
-      _c("h4", { staticClass: "ml-4 mb-0" }, [_vm._v("Home")]),
-      _vm._v(" "),
-      !_vm.checkToken()
-        ? _c(
-            "button",
-            {
-              staticClass: "btn btn-primary ml-auto",
-              on: {
-                click: function($event) {
-                  return _vm.$router.push("/login")
+    _c(
+      "div",
+      { staticClass: "nav-sticky navbar navbar-expand navbar-light bg-white" },
+      [
+        _c("h4", { staticClass: "ml-2 mb-0" }, [_vm._v("Welcome")]),
+        _vm._v(" "),
+        !_vm.checkToken()
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-primary ml-auto",
+                on: {
+                  click: function($event) {
+                    return _vm.$router.push("/login")
+                  }
                 }
-              }
-            },
-            [_vm._v("Login")]
-          )
-        : _c(
-            "button",
-            {
-              staticClass: "btn btn-primary ml-auto",
-              on: { click: _vm.logout }
-            },
-            [_vm._v("Logout")]
-          )
-    ]),
+              },
+              [_vm._v("Login")]
+            )
+          : [
+              _c("ul", { staticClass: "navbar-nav mt-2 mt-md-0 ml-auto" }, [
+                _vm.isAdmin()
+                  ? _c("li", { staticClass: "nav-item" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "nav-link",
+                          attrs: { href: "javascript:;" },
+                          on: {
+                            click: function($event) {
+                              return _vm.$router.push("/dashboard")
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "svg",
+                            {
+                              staticClass: "bi bi-grid",
+                              attrs: {
+                                width: "24",
+                                height: "24",
+                                viewBox: "0 0 20 20",
+                                fill: "currentColor",
+                                xmlns: "http://www.w3.org/2000/svg"
+                              }
+                            },
+                            [
+                              _c("path", {
+                                attrs: {
+                                  "fill-rule": "evenodd",
+                                  d:
+                                    "M9.5 4.5a1 1 0 00-1-1h-4a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1v-4zm-1 7h-4v4h4v-4zm7 0h-4v4h4v-4zm0-7h-4v4h4v-4zm-7 0h-4v4h4v-4zm2 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4zm-6 6a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1v-4a1 1 0 00-1-1h-4zm7 0a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1v-4a1 1 0 00-1-1h-4z",
+                                  "clip-rule": "evenodd"
+                                }
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("li", { staticClass: "nav-item" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "nav-link",
+                      attrs: { href: "javascript:;" },
+                      on: { click: _vm.logout }
+                    },
+                    [
+                      _c(
+                        "svg",
+                        {
+                          staticClass: "bi bi-box-arrow-right",
+                          attrs: {
+                            width: "24",
+                            height: "24",
+                            viewBox: "0 0 20 20",
+                            fill: "currentColor",
+                            xmlns: "http://www.w3.org/2000/svg"
+                          }
+                        },
+                        [
+                          _c("path", {
+                            attrs: {
+                              "fill-rule": "evenodd",
+                              d:
+                                "M13.646 13.354a.5.5 0 010-.708L16.293 10l-2.647-2.646a.5.5 0 01.708-.708l3 3a.5.5 0 010 .708l-3 3a.5.5 0 01-.708 0z",
+                              "clip-rule": "evenodd"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("path", {
+                            attrs: {
+                              "fill-rule": "evenodd",
+                              d:
+                                "M6.5 10a.5.5 0 01.5-.5h9a.5.5 0 010 1H7a.5.5 0 01-.5-.5z",
+                              "clip-rule": "evenodd"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("path", {
+                            attrs: {
+                              "fill-rule": "evenodd",
+                              d:
+                                "M4 15.5A1.5 1.5 0 012.5 14V6A1.5 1.5 0 014 4.5h7A1.5 1.5 0 0112.5 6v1.5a.5.5 0 01-1 0V6a.5.5 0 00-.5-.5H4a.5.5 0 00-.5.5v8a.5.5 0 00.5.5h7a.5.5 0 00.5-.5v-1.5a.5.5 0 011 0V14a1.5 1.5 0 01-1.5 1.5H4z",
+                              "clip-rule": "evenodd"
+                            }
+                          })
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ]
+      ],
+      2
+    ),
     _vm._v(" "),
     _c(
       "div",
@@ -39084,140 +39678,187 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "status-bar align-items-center" }, [
-      _c(
-        "span",
-        {
-          on: {
-            click: function($event) {
-              return _vm.$router.push("/")
+    _c(
+      "div",
+      { staticClass: "nav-sticky navbar navbar-expand navbar-light bg-white" },
+      [
+        _c(
+          "span",
+          {
+            staticClass: "btn-link",
+            on: {
+              click: function($event) {
+                return _vm.$router.push("/")
+              }
             }
-          }
-        },
-        [_vm._v("Back")]
-      ),
-      _vm._v(" "),
-      _c("h4", { staticClass: "ml-4 mb-0" }, [_vm._v("Login")]),
-      _vm._v(" "),
+          },
+          [
+            _c(
+              "svg",
+              {
+                staticClass: "bi bi-chevron-left",
+                attrs: {
+                  width: "24",
+                  height: "24",
+                  viewBox: "0 0 20 20",
+                  fill: "currentColor",
+                  xmlns: "http://www.w3.org/2000/svg"
+                }
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    "fill-rule": "evenodd",
+                    d:
+                      "M13.354 3.646a.5.5 0 010 .708L7.707 10l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z",
+                    "clip-rule": "evenodd"
+                  }
+                })
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("h4", { staticClass: "ml-1 mb-0" }, [_vm._v("Login")]),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary ml-auto",
+            on: {
+              click: function($event) {
+                return _vm.$router.push("/registration")
+              }
+            }
+          },
+          [_vm._v("Register")]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "container mt-4" }, [
+      _c("form", { staticClass: "card mb-3 p-3" }, [
+        _c("div", { staticClass: "container mt-4" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "inputEmail" } }, [
+              _vm._v("Email address")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.email,
+                  expression: "email"
+                }
+              ],
+              staticClass: "form-control",
+              class: {
+                "is-invalid": _vm.errors.emptyEmail || _vm.errors.invalidEmail
+              },
+              attrs: {
+                type: "text",
+                id: "inputEmail",
+                "aria-describedby": "emailHelp",
+                placeholder: "Enter your email"
+              },
+              domProps: { value: _vm.email },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.email = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _vm.errors.emptyEmail
+              ? _c("div", { staticClass: "invalid-feedback" }, [
+                  _vm._v(
+                    "\n                        Enter your email address.\n                    "
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.errors.invalidEmail
+              ? _c("div", { staticClass: "invalid-feedback" }, [
+                  _vm._v(
+                    "\n                        Invalid email address.\n                    "
+                  )
+                ])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "inputPassword" } }, [
+              _vm._v("Password")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.password,
+                  expression: "password"
+                }
+              ],
+              staticClass: "form-control",
+              class: {
+                "is-invalid": _vm.errors.password || _vm.errors.shortPassword
+              },
+              attrs: {
+                type: "password",
+                id: "inputPassword",
+                placeholder: "Password"
+              },
+              domProps: { value: _vm.password },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.password = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _vm.errors.password
+              ? _c("div", { staticClass: "invalid-feedback" }, [
+                  _vm._v(
+                    "\n                        Enter your password.\n                    "
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.errors.shortPassword
+              ? _c("div", { staticClass: "invalid-feedback" }, [
+                  _vm._v(
+                    "\n                        Password must be more than 6 characters.\n                    "
+                  )
+                ])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _vm._m(1)
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "sticky-footer" }, [
       _c(
         "button",
         {
-          staticClass: "btn btn-primary ml-auto",
-          on: {
-            click: function($event) {
-              return _vm.$router.push("/registration")
-            }
-          }
+          staticClass: "btn btn-primary btn-block mt-4",
+          attrs: { type: "button" },
+          on: { click: _vm.checkForm }
         },
-        [_vm._v("Register")]
+        [_vm._v("Login")]
       )
-    ]),
-    _vm._v(" "),
-    _c("form", { on: { submit: _vm.checkForm } }, [
-      _c("div", { staticClass: "container mt-4" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "inputEmail" } }, [
-            _vm._v("Email address")
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.email,
-                expression: "email"
-              }
-            ],
-            staticClass: "form-control",
-            class: {
-              "is-invalid": _vm.errors.emptyEmail || _vm.errors.invalidEmail
-            },
-            attrs: {
-              type: "text",
-              id: "inputEmail",
-              "aria-describedby": "emailHelp",
-              placeholder: "Enter your email"
-            },
-            domProps: { value: _vm.email },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.email = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _vm.errors.emptyEmail
-            ? _c("div", { staticClass: "invalid-feedback" }, [
-                _vm._v("\n            Enter your email address.\n          ")
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.errors.invalidEmail
-            ? _c("div", { staticClass: "invalid-feedback" }, [
-                _vm._v("\n            Invalid email address.\n          ")
-              ])
-            : _vm._e()
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "inputPassword" } }, [
-            _vm._v("Password")
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.password,
-                expression: "password"
-              }
-            ],
-            staticClass: "form-control",
-            class: {
-              "is-invalid": _vm.errors.password || _vm.errors.shortPassword
-            },
-            attrs: {
-              type: "password",
-              id: "inputPassword",
-              placeholder: "Password"
-            },
-            domProps: { value: _vm.password },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.password = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _vm.errors.password
-            ? _c("div", { staticClass: "invalid-feedback" }, [
-                _vm._v("\n            Enter your password.\n          ")
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.errors.shortPassword
-            ? _c("div", { staticClass: "invalid-feedback" }, [
-                _vm._v(
-                  "\n            Password must be more than 6 characters.\n          "
-                )
-              ])
-            : _vm._e()
-        ]),
-        _vm._v(" "),
-        _vm._m(1)
-      ]),
-      _vm._v(" "),
-      _vm._m(2)
     ])
   ])
 }
@@ -39230,7 +39871,7 @@ var staticRenderFns = [
       "div",
       { staticClass: "d-inline-flex w-100 mb-4 justify-content-center" },
       [
-        _c("div", { staticClass: "logo" }, [
+        _c("div", { staticClass: "logo mr-3" }, [
           _c("img", {
             staticClass: "img-fluid",
             attrs: { src: "/images/logo.png", alt: "logo" }
@@ -39255,21 +39896,6 @@ var staticRenderFns = [
         "label",
         { staticClass: "form-check-label", attrs: { for: "exampleCheck1" } },
         [_vm._v("Remember me")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "sticky-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-primary btn-block mt-4",
-          attrs: { type: "submit" }
-        },
-        [_vm._v("Login")]
       )
     ])
   }
@@ -39373,21 +39999,50 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "status-bar align-items-center" }, [
-      _c(
-        "span",
-        {
-          on: {
-            click: function($event) {
-              return _vm.$router.push("/home")
+    _c(
+      "div",
+      { staticClass: "nav-sticky navbar navbar-expand navbar-light bg-white" },
+      [
+        _c(
+          "span",
+          {
+            staticClass: "btn-link",
+            on: {
+              click: function($event) {
+                return _vm.$router.push("/")
+              }
             }
-          }
-        },
-        [_vm._v("Back")]
-      ),
-      _vm._v(" "),
-      _c("h4", { staticClass: "ml-4 mb-0" }, [_vm._v("Order Food")])
-    ]),
+          },
+          [
+            _c(
+              "svg",
+              {
+                staticClass: "bi bi-chevron-left",
+                attrs: {
+                  width: "24",
+                  height: "24",
+                  viewBox: "0 0 20 20",
+                  fill: "currentColor",
+                  xmlns: "http://www.w3.org/2000/svg"
+                }
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    "fill-rule": "evenodd",
+                    d:
+                      "M13.354 3.646a.5.5 0 010 .708L7.707 10l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z",
+                    "clip-rule": "evenodd"
+                  }
+                })
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("h4", { staticClass: "ml-2 py-2 mb-0" }, [_vm._v("Order Food")])
+      ]
+    ),
     _vm._v(" "),
     _c("form", [
       _c("div", { staticClass: "container mt-4", attrs: { id: "Ordering" } }, [
@@ -39547,21 +40202,52 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "status-bar align-items-center" }, [
-      _c(
-        "span",
-        {
-          on: {
-            click: function($event) {
-              return _vm.$router.push("/login")
+    _c(
+      "div",
+      { staticClass: "nav-sticky navbar navbar-expand navbar-light bg-white" },
+      [
+        _c(
+          "span",
+          {
+            staticClass: "btn-link",
+            on: {
+              click: function($event) {
+                return _vm.$router.push("/login")
+              }
             }
-          }
-        },
-        [_vm._v("Back")]
-      ),
-      _vm._v(" "),
-      _c("h4", { staticClass: "ml-4 mb-0" }, [_vm._v("Registration")])
-    ]),
+          },
+          [
+            _c(
+              "svg",
+              {
+                staticClass: "bi bi-chevron-left",
+                attrs: {
+                  width: "24",
+                  height: "24",
+                  viewBox: "0 0 20 20",
+                  fill: "currentColor",
+                  xmlns: "http://www.w3.org/2000/svg"
+                }
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    "fill-rule": "evenodd",
+                    d:
+                      "M13.354 3.646a.5.5 0 010 .708L7.707 10l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z",
+                    "clip-rule": "evenodd"
+                  }
+                })
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("h4", { staticClass: "ml-2 py-2 mb-0" }, [_vm._v("Registration")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "action ml-auto" })
+      ]
+    ),
     _vm._v(" "),
     _c("form", { on: { submit: _vm.checkForm } }, [
       _c("div", { staticClass: "container mt-4" }, [
@@ -54966,11 +55652,11 @@ try {
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-apiToken = window.localStorage.getItem('user_token');
+axios.defaults.headers.common.accept = 'application/json';
+apiToken = localStorage.getItem('user_token');
 
 if (apiToken) {
   axios.defaults.headers.common.Authorization = 'Bearer ' + apiToken;
-  axios.defaults.headers.common.accept = 'application/json';
 }
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -55570,7 +56256,7 @@ __webpack_require__.r(__webpack_exports__);
 var Logout = {
   methods: {
     checkToken: function checkToken() {
-      return !!window.localStorage.getItem('user_token');
+      return !!localStorage.getItem('user_token');
     },
     logout: function logout() {
       var _this = this;
@@ -55578,6 +56264,7 @@ var Logout = {
       if (this.checkToken()) {
         axios.post('/api/logout').then(function (res) {
           localStorage.removeItem('user_token');
+          localStorage.removeItem('is_admin');
 
           _this.$router.push('/login');
         })["catch"](function (err) {
@@ -55588,6 +56275,26 @@ var Logout = {
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (Logout);
+
+/***/ }),
+
+/***/ "./resources/js/mixins/user.js":
+/*!*************************************!*\
+  !*** ./resources/js/mixins/user.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var User = {
+  methods: {
+    isAdmin: function isAdmin() {
+      return localStorage.getItem('is_admin');
+    }
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (User);
 
 /***/ }),
 

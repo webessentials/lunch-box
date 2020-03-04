@@ -22,12 +22,11 @@ try {
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-apiToken = window.localStorage.getItem('user_token');
+axios.defaults.headers.common.accept = 'application/json';
+apiToken = localStorage.getItem('user_token');
 
 if (apiToken) {
   axios.defaults.headers.common.Authorization = 'Bearer ' + apiToken;
-  axios.defaults.headers.common.accept = 'application/json';
 }
 
 /**

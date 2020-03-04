@@ -31,4 +31,20 @@ class Order extends Model
      * @var array
      */
     protected $guarded = ['id'];
+
+    /**
+     * Get the comments for the blog post.
+     */
+    public function orderDetails()
+    {
+        return $this->hasMany('App\OrderDetail');
+    }
+
+    /**
+     * Get the post that owns the comment.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }

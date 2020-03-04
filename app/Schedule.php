@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FoodSchedule extends Model
+class Schedule extends Model
 {
     /**
      * @var array
@@ -21,4 +21,20 @@ class FoodSchedule extends Model
      * @var array
      */
     protected $guarded = ['id'];
+
+    /**
+     * Get the food that added to this date.
+     */
+    public function food()
+    {
+        return $this->belongsTo('App\Food');
+    }
+
+    /**
+     * Get the user that owns this schedule.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }
