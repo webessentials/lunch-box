@@ -28,7 +28,6 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::apiResource('foods', 'API\FoodController');
     Route::apiResource('schedules', 'API\ScheduleController');
     Route::post('/delete/schedules', 'API\ScheduleController@destroy');
-    Route::apiResource('schedule-details','API\FoodScheduleDetailController');
     Route::post('orders/cancel', 'API\OrderController@destroy');
     Route::get('orders/user-today', 'API\OrderController@orderedByCurrentUser');
     Route::get('orders/today/{food}', 'API\OrderDetailController@today');

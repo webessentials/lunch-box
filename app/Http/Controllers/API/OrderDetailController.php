@@ -21,6 +21,7 @@ class OrderDetailController extends Controller
      */
     public function today($food)
     {
+        $this->authorize('viewAny', OrderDetail::class);
         $orderDetails = OrderDetail::where('food_id', $food)->whereDate('created_at', Carbon::now()->format('y-m-d'))->with(['order.user'])->get();
         return OrderDetailResource::collection($orderDetails);
     }
