@@ -21,16 +21,18 @@ Route::apiResource('users', 'API\UserController');
 Route::apiResource('order-details', 'API\OrderDetailController');
 
 Route::group(['middleware' => 'auth:api'], function() {
-
     Route::get('user', 'API\UserController@details');
     Route::post('logout','API\UserController@logout');
     Route::apiResource('users', 'API\UserController');
 
     Route::apiResource('foods', 'API\FoodController');
     Route::apiResource('schedules', 'API\ScheduleController');
+    Route::post('/delete/schedules', 'API\ScheduleController@destroy');
     Route::apiResource('schedule-details','API\FoodScheduleDetailController');
+    Route::post('orders/cancel', 'API\OrderController@destroy');
+    Route::get('orders/user-today', 'API\OrderController@orderedByCurrentUser');
+    Route::get('orders/today/{food}', 'API\OrderDetailController@today');
     Route::apiResource('orders', 'API\OrderController');
-    Route::get('order/today', 'API\OrderController@ordered');
     Route::put('order/payment-status', 'API\OrderController@paymentStatus');
 });
 

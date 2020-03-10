@@ -26,27 +26,49 @@
 
       </div>
       <div class="container mt-4">
-          <div class="d-block" v-if="!foods.length">
+          <div class="w-100 text-center" v-if="loading">
+              <div class="spinner-border text-center" role="status">
+                  <span class="sr-only">Loading...</span>
+              </div>
+          </div>
+          <div class="d-block" v-else-if="!foods.length">
               <div class="alert alert-warning text-center">
                   <h3>Sorry there's no food yet</h3>
               </div>
               <img src="/image/sad.jpg" class="img-fluid">
           </div>
-          <div v-else class="card mb-3 p-3" v-for="food in foods">
-              <div class="row">
-                  <div class="col-md-4">
-                      <img class="img-fluid" :src="food.food.picture" alt="Img">
+          <template v-else>
+              <template v-if="yourFoods.length > 0">
+                  <h2>You ordered:</h2>
+                  <div class="card mb-3 p-3" v-for="order in yourFoods">
+                      <template v-for="order_detail in order.order_details">
+                          <h5>{{order_detail.food.name}}&nbsp;(<b class="text-danger">$ {{order_detail.unit_price}}</b>)</h5>
+                          <p>Quantity:&nbsp;{{order_detail.quantity}}
+                              <span class="d-block">Price:&nbsp;$ {{order_detail.quantity * order_detail.unit_price}}</span>
+                          </p>
+                          <div>
+                              <button class="btn btn-primary btn-block" @click.prevent="cancelOrder(order.id)">Cancel</button>
+                          </div>
+                      </template>
                   </div>
-                  <div class="col-md-4">
-                      <div class="card-body pt-md-0">
-                          <h5>{{food.food.name}} (<b class="text-danger"> ${{food.food.price}} </b>)</h5>
+              </template>
+              <h3>Food today:</h3>
+              <div class="card mb-3 p-3" v-for="food in foods">
+                  <div class="row">
+                      <div class="col-md-4">
+                          <img class="img-fluid" :src="food.food.picture" alt="Img">
+                      </div>
+                      <div class="col-md-4">
+                          <div class="card-body pt-md-0">
+                              <h5>{{food.food.name}} (<b class="text-danger"> ${{food.food.price}} </b>)</h5>
+                          </div>
+                      </div>
+                      <div class="col-md-4">
+                          <button class="btn btn-primary btn-block" @click="$router.push('/ordering/'+food.food.id)" v-if="checkToken()">Order</button>
                       </div>
                   </div>
-                  <div class="col-md-4">
-                      <button class="btn btn-primary btn-block" @click="$router.push('/ordering/'+food.food.id)" v-if="checkToken()">Order</button>
-                  </div>
               </div>
-          </div>
+          </template>
       </div>
     </div>
 </template>
@@ -57,7 +79,9 @@
     export default {
         data() {
             return {
-                foods: []
+                foods: [],
+                yourFoods: [],
+                loading: false
             }
         },
         mixins: [Logout, User],
@@ -66,19 +90,38 @@
               return !!window.localStorage.getItem('user_token');
             },
             fetchFoods() {
+                this.loading = true;
                 axios.get('/api/schedule/today')
                 .then(res => {
-                    this.foods = res.data.data;
+                    this.foods = res.data;
+                    this.loading = false;
                 })
                 .catch(err => console.log(err));
             },
             getOrderList() {
-
+                this.loading = true;
+                axios.get('/api/orders/user-today')
+                .then(res => {
+                    this.yourFoods = res.data;
+                })
+                .catch(err => console.log(err));
+            },
+            cancelOrder: function(id) {
+                const instance = this;
+                axios.post('/api/orders/cancel', {
+                    id,
+                }).then(response => {
+                    let index = instance.yourFoods.findIndex(f => parseInt(f.id) === parseInt(id));
+                    if (index !== -1) instance.yourFoods.splice(index, 1);
+                })
             }
         },
-        created() {
+        mounted() {
+            if (this.checkToken()) {
+                this.getOrderList();
+            }
+
             this.fetchFoods();
-            this.getOrderList();
         }
     }
 </script>

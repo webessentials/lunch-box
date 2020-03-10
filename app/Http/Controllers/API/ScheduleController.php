@@ -79,14 +79,12 @@ class ScheduleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Schedule  $foodSchedule
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Schedule $foodSchedule)
+    public function destroy(Request $request)
     {
-        FoodScheduleDetail::where(['food_schedule_id' => $foodSchedule->id])->delete();
-        $foodSchedule->delete();
-        return response('', 204);
+        return Schedule::where('food_id', $request->food_id)->whereDate('date', Carbon::now()->format('y-m-d'))->delete();
     }
 }

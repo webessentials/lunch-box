@@ -35,7 +35,7 @@ class Order extends Model
     /**
      * Get the comments for the blog post.
      */
-    public function orderDetails()
+    public function order_details()
     {
         return $this->hasMany('App\OrderDetail');
     }
