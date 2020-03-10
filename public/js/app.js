@@ -39883,7 +39883,7 @@ var render = function() {
               _vm._v(" "),
               _c("img", {
                 staticClass: "img-fluid",
-                attrs: { src: "/image/sad.jpg" }
+                attrs: { src: "/images/sad.jpg" }
               })
             ])
           : [
@@ -56000,7 +56000,7 @@ Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 axios.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
-  if (error.response.status === 403) {
+  if (error.response.status >= 400) {
     window.location.href = '/';
     return;
   }

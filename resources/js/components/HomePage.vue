@@ -35,7 +35,7 @@
               <div class="alert alert-warning text-center">
                   <h3>Sorry there's no food yet</h3>
               </div>
-              <img src="/image/sad.jpg" class="img-fluid">
+              <img src="/images/sad.jpg" class="img-fluid">
           </div>
           <template v-else>
               <template v-if="yourFoods.length > 0">

@@ -11,7 +11,7 @@ Vue.use(VueRouter);
 axios.interceptors.response.use((response) => {
     return response
 }, function (error) {
-    if (error.response.status === 403) {
+    if (error.response.status >= 400) {
         window.location.href = '/';
         return
     }
