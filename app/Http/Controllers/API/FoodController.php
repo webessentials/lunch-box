@@ -18,6 +18,7 @@ class FoodController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Food::class);
         return FoodResource::collection(Food::all());
     }
 
@@ -29,6 +30,7 @@ class FoodController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Food::class);
         $data = $request->all();
         $validator = Validator::make($data, Food::$rules);
         if ($validator->fails()) {
@@ -37,8 +39,8 @@ class FoodController extends Controller
 
         if (!empty($data['picture'])) {
             $name = time() . '_food.' . $request->file('picture')->guessExtension();
-            $request->file('picture')->move(public_path("/image/food/"), $name);
-            $data['picture'] = url('image/food', $name);
+            $request->file('picture')->move(public_path("/images/food/"), $name);
+            $data['picture'] = url('images/food', $name);
         }
 
         return Food::create($data);
@@ -52,6 +54,7 @@ class FoodController extends Controller
      */
     public function show(Food $food)
     {
+
         return response()->json($food);
     }
 
@@ -64,6 +67,7 @@ class FoodController extends Controller
      */
     public function update(Request $request, Food $food)
     {
+        $this->authorize('update', Food::class);
         $data = $request->all();
         $validator = Validator::make($data, Food::$rules);
         if ($validator->fails()) {
@@ -71,8 +75,8 @@ class FoodController extends Controller
         }
         if (!empty($data['picture']) && $data['picture'] != $food->picture) {
             $name = time() . '_food.' . $request->file('picture')->guessExtension();
-            $request->file('picture')->move(public_path("/image/food/"), $name);
-            $data['picture'] = url('image/food', $name);
+            $request->file('picture')->move(public_path("/images/food/"), $name);
+            $data['picture'] = url('images/food', $name);
         }
        return Food::where('id',$food->id)->update($data);
     }
@@ -85,6 +89,7 @@ class FoodController extends Controller
      */
     public function destroy(Food $food)
     {
+        $this->authorize('delete', Food::class);
         $food->delete();
         return response('', 204);
     }

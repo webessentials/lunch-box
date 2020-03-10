@@ -39883,7 +39883,7 @@ var render = function() {
               _vm._v(" "),
               _c("img", {
                 staticClass: "img-fluid",
-                attrs: { src: "/image/sad.jpg" }
+                attrs: { src: "/images/sad.jpg" }
               })
             ])
           : [
@@ -55997,6 +55997,16 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
+axios.interceptors.response.use(function (response) {
+  return response;
+}, function (error) {
+  if (error.response.status >= 400) {
+    window.location.href = '/';
+    return;
+  }
+
+  return Promise.reject(error);
+});
 var app = new Vue({
   router: _routers_router__WEBPACK_IMPORTED_MODULE_1__["default"],
   el: '#app'

@@ -20,6 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', User::class);
         return UserResource::collection(User::all());
     }
 

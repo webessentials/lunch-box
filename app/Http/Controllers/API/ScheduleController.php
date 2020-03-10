@@ -30,6 +30,7 @@ class ScheduleController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Schedule::class);
         return ScheduleResource::collection(Schedule::all());
     }
 
@@ -41,6 +42,7 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Schedule::class);
         $data = $request->all();
         $validator = Validator::make($data, Schedule::$rules);
         if ($validator->fails()) {
@@ -73,7 +75,7 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, Schedule $foodSchedule)
     {
-        //
+        $this->authorize('update', Schedule::class);
     }
 
     /**
@@ -85,6 +87,7 @@ class ScheduleController extends Controller
      */
     public function destroy(Request $request)
     {
+        $this->authorize('delete', Schedule::class);
         return Schedule::where('food_id', $request->food_id)->whereDate('date', Carbon::now()->format('y-m-d'))->delete();
     }
 }
