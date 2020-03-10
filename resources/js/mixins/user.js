@@ -1,7 +1,7 @@
 const User = {
     methods: {
         isAdmin() {
-            return localStorage.getItem('is_admin')
+            return localStorage.getItem('is_admin')  === 'true';
         }
     }
 };

@@ -12,10 +12,10 @@ const routes = [
     { path: '/login', component: Login },
     { path: '/registration', component: Registeration },
     { path: '/dashboard', component: Dashboard },
-    { path: '/ordering/:id', component: Ordering },
     { path: '/foodlist', component: FoodList },
     { path: '/orderlist', component: OrderList },
-    { path: '/addfood', component: AddFood }
+    { path: '/addfood', component: AddFood },
+    { path: '/ordering/:id', component: Ordering }
 ];
 
 export default routes

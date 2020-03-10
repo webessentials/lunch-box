@@ -4,12 +4,26 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderDetailResource;
+use App\Http\Resources\OrderResource;
+use App\Order;
 use App\OrderDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class OrderDetailController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @param int $food
+     * @return \Illuminate\Http\Response
+     */
+    public function today($food)
+    {
+        $orderDetails = OrderDetail::where('food_id', $food)->whereDate('created_at', Carbon::now()->format('y-m-d'))->with(['order.user'])->get();
+        return OrderDetailResource::collection($orderDetails);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -43,7 +57,7 @@ class OrderDetailController extends Controller
             $orderDetail['pack_quantity'] = $request->pack_quantity;
             $orderDetail['unit_price'] = $request->unit_price;
             $orderDetail = OrderDetail::create($orderDetail);
-        }else {
+        } else {
             if (OrderDetail::where(['id' => $orderDetail->id])
                     ->update(['quantity' => $request->quantity,
                         'pack_quantity' =>  $request->pack_quantity,

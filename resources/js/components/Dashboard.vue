@@ -23,33 +23,32 @@
         </ul>
     </div>
     <div class="container mt-4">
-      <div class="d-flex justify-content-center">
-        <button class="btn btn-primary btn-circle">
-          15
-        </button>
-        <div class="ml-4">
-          <button class="btn btn-success d-block truncate-text">
-            7 Dishes: Fried lobster
-          </button>
-          <button class="btn btn-success d-block mt-4 truncate-text">
-            8 Dishes: Chicken Soup
-          </button>
+        <div class="w-100 text-center" v-if="loading">
+            <div class="spinner-border text-center" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
         </div>
-      </div>
-      <ul class="list-group mt-5">
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          Cras justo odio
-          <span class="badge badge-primary badge-pill">14</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          Dapibus ac facilisis in
-          <span class="badge badge-primary badge-pill">2</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          Morbi leo risus
-          <span class="badge badge-primary badge-pill">1</span>
-        </li>
-      </ul>
+        <template v-else-if="foods.length > 0">
+          <div class="d-flex">
+            <button class="btn btn-primary btn-circle flex-shrink-0" @click="setFilter(null)">
+              {{toTalDishes}}
+            </button>
+            <div class="ml-4">
+              <button v-for="(food, index) in foods" class="btn btn-success d-block truncate-text my-2" @click="setFilter(index)" :class="{active: index === filter}">
+                  <span class="badge badge-secondary badge-pill">{{food.dishes_count}}</span> Dishes: {{food.name}}
+              </button>
+            </div>
+          </div>
+          <ul class="list-group mt-5">
+            <li v-for="user in users" class="list-group-item d-flex justify-content-between align-items-center">
+              {{user.order.user.name}}
+              <span class="badge badge-primary badge-pill">{{user.quantity}}</span>
+            </li>
+          </ul>
+        </template>
+        <div v-else class="card mb-3 p-3">
+            <h3>You are not yet add the food for today.</h3>
+        </div>
     </div>
     <div class="sticky-footer">
       <button class="btn btn-primary btn-block" @click="$router.push('/foodlist')">Prepare menu</button>
@@ -62,20 +61,74 @@
   export default {
     data() {
       return {
-
+            foods: [],
+            filter: null,
+            loading: false
       }
     },
     mixins: [Logout],
     mounted() {
       this.fetchOrders()
     },
+    computed: {
+        toTalDishes: function() {
+            let total = 0;
+            this.foods.forEach(food => {
+                total += parseInt(food.dishes_count)
+            });
+            return total;
+        },
+        users: function() {
+            let users = [];
+            let user = {};
+            if (this.filter !== null) {
+                this.foods[this.filter]['order_details'].forEach(orderDetail => {
+                    user = orderDetail;
+                    users.push(user)
+                })
+            } else {
+                this.foods.forEach(food => {
+                    food['order_details'].forEach(orderDetail => {
+                        user = orderDetail;
+                        users.push(user)
+                    })
+                });
+            }
+            return users;
+        }
+    },
     methods: {
-      fetchOrders() {
-        axios.get('/api/orders')
-        .then(response => {
-          console.log(response)
-        })
-      }
+        setFilter: function(filter) {
+            this.filter = filter
+        },
+        fetchOrdersByFood: function(food) {
+            const instance = this;
+            let dishesCount = 0;
+            axios.get('/api/orders/today/' + food.id)
+            .then(response => {
+                response.data.forEach(orderDetail => {
+                    dishesCount += parseInt(orderDetail.quantity)
+                });
+                food['order_details'] = response.data;
+                food['dishes_count'] = dishesCount;
+                instance.foods.push(food);
+                instance.loading = false;
+            })
+        },
+        fetchOrders() {
+            const instance = this;
+            instance.loading = true;
+            axios.get('/api/schedule/today')
+            .then(response => {
+                if (response.data.length) {
+                    response.data.forEach(schedule => {
+                        instance.fetchOrdersByFood(schedule.food);
+                    });
+                } else {
+                    instance.loading = false;
+                }
+            })
+        }
     }
   }
 </script>

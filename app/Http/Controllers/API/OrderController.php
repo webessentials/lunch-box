@@ -31,16 +31,12 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function ordered() {
-        $order = Order::where('user_id', Auth::id())
-            ->whereDate('created_at', Carbon::now()->format('y-m-d'))
-            ->first();
-        if ($order != null) {
-            $orderDetail = OrderDetail::where('order_id', $order->id)->get();
-            $order['order_details'] = $orderDetail;
-        }
-        return  $order;
+    public function orderedByCurrentUser() {
+        $orders = Order::where('user_id', Auth::id())->whereDate('created_at', Carbon::now()->format('y-m-d'))
+            ->with('order_details.food')->get();
+        return  OrderResource::collection($orders);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -63,10 +59,6 @@ class OrderController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-
-        $order = Order::where('user_id', Auth::id())
-            ->whereDate('created_at', Carbon::now()->format('y-m-d'))
-            ->first();
 
         $data['user_id'] = Auth::id();
         $data['amount'] = $request->amount;
@@ -142,13 +134,12 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Order  $order
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Order $order)
+    public function destroy(Request $request)
     {
-        OrderDetail::where(['order_id' => $order->id])->delete();
-        $order->delete();
-        return response('', 204);
+        OrderDetail::where(['order_id' => $request->id])->delete();
+        return Order::where('id', $request->id)->delete();
     }
 }

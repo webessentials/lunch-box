@@ -28,9 +28,10 @@
         </ul>
     </div>
     <div class="container mt-4">
-        <form class="card mb-3 p-3" @submit="onAddFood">
+        <form class="card mb-3 p-3" @submit.prevent="onAddFood">
             <div class="form-group">
                 <input type="file" class="custom-file-input" id="image" @change="getFile($event)">
+                <img v-if="file != null" class="mw-100 position-absolute custom-image" src="" alt="Your image" id="imagePre">
             </div>
             <div class="form-group">
                 <label for="name">Name</label>
@@ -57,8 +58,16 @@
             }
         },
         mixins: [Logout],
+        computed: {
+        },
         methods: {
             getFile: function (event) {
+                var oFReader = new FileReader();
+                oFReader.readAsDataURL(event.target.files[0]);
+
+                oFReader.onload = function (oFREvent) {
+                    document.getElementById("imagePre").src = oFREvent.target.result;
+                };
                 this.file = event.target.files[0];
             },
             onAddFood: function () {
